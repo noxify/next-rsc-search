@@ -10,19 +10,19 @@ export function intersection<T>(a: T[], b: T[]): T[] {
  */
 function deepHash(value: any, cache = new WeakMap<object, string>()): string {
   // Handle primitives and null/undefined.
-  if (value === null) return 'null'
-  if (value === undefined) return 'undefined'
+  if (value === null) return "null"
+  if (value === undefined) return "undefined"
   const type = typeof value
-  if (type === 'number' || type === 'boolean' || type === 'string') {
+  if (type === "number" || type === "boolean" || type === "string") {
     return `${type}:${value.toString()}`
   }
-  if (type === 'function') {
+  if (type === "function") {
     // Note: using toString for functions.
     return `function:${value.toString()}`
   }
 
   // For objects and arrays, use caching to avoid repeated work.
-  if (type === 'object') {
+  if (type === "object") {
     // If we’ve seen this object before, return the cached hash.
     if (cache.has(value)) {
       return cache.get(value)!
@@ -30,13 +30,13 @@ function deepHash(value: any, cache = new WeakMap<object, string>()): string {
     let hash: string
     if (Array.isArray(value)) {
       // Compute hash for each element in order.
-      hash = `array:[${value.map((v) => deepHash(v, cache)).join(',')}]`
+      hash = `array:[${value.map((v) => deepHash(v, cache)).join(",")}]`
     } else {
       // For objects, sort keys to ensure the representation is stable.
       const keys = Object.keys(value).sort()
       const props = keys
         .map((k) => `${k}:${deepHash(value[k], cache)}`)
-        .join(',')
+        .join(",")
       hash = `object:{${props}}`
     }
     cache.set(value, hash)
@@ -69,8 +69,8 @@ function deepEqual(a: any, b: any): boolean {
   }
 
   // Check objects.
-  if (typeof a === 'object') {
-    if (typeof b !== 'object') return false
+  if (typeof a === "object") {
+    if (typeof b !== "object") return false
     const aKeys = Object.keys(a).sort()
     const bKeys = Object.keys(b).sort()
     if (aKeys.length !== bKeys.length) return false

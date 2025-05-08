@@ -1,8 +1,9 @@
-'use client'
+"use client"
 
-import { Input } from '@/components/ui/input'
-import { useCallback, useEffect, useState } from 'react'
-import { debounce } from '../lib/debounce'
+import { useCallback, useEffect, useState } from "react"
+import { Input } from "@/components/ui/input"
+
+import { debounce } from "../lib/debounce"
 
 export function DebouncedInput({
   value: initialValue,
@@ -13,7 +14,7 @@ export function DebouncedInput({
   value: string | number
   onChange: (value: string | number) => void
   debounceMs?: number
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
   const [value, setValue] = useState(initialValue)
 
   // Sync with initialValue when it changes

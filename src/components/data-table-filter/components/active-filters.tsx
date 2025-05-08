@@ -1,20 +1,21 @@
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { X } from "lucide-react"
+
 import type {
   Column,
   ColumnDataType,
   DataTableFilterActions,
   FilterModel,
-  FilterStrategy,
   FiltersState,
-} from '../core/types'
-import { getColumn } from '../lib/helpers'
-import type { Locale } from '../lib/i18n'
-import { FilterOperator } from './filter-operator'
-import { FilterSubject } from './filter-subject'
-import { FilterValue } from './filter-value'
+  FilterStrategy,
+} from "../core/types"
+import type { Locale } from "../lib/i18n"
+import { getColumn } from "../lib/helpers"
+import { FilterOperator } from "./filter-operator"
+import { FilterSubject } from "./filter-subject"
+import { FilterValue } from "./filter-value"
 
 interface ActiveFiltersProps<TData> {
   columns: Column<TData>[]
@@ -29,7 +30,7 @@ export function ActiveFilters<TData>({
   filters,
   actions,
   strategy,
-  locale = 'en',
+  locale = "en",
 }: ActiveFiltersProps<TData>) {
   return (
     <>
@@ -70,10 +71,10 @@ export function ActiveFilter<TData, TType extends ColumnDataType>({
   column,
   actions,
   strategy,
-  locale = 'en',
+  locale = "en",
 }: ActiveFilterProps<TData, TType>) {
   return (
-    <div className="flex h-7 items-center rounded-2xl border border-border bg-background shadow-xs text-xs">
+    <div className="border-border bg-background flex h-7 items-center rounded-2xl border text-xs shadow-xs">
       <FilterSubject column={column} />
       <Separator orientation="vertical" />
       <FilterOperator
@@ -93,7 +94,7 @@ export function ActiveFilter<TData, TType extends ColumnDataType>({
       <Separator orientation="vertical" />
       <Button
         variant="ghost"
-        className="rounded-none rounded-r-2xl text-xs w-7 h-full"
+        className="h-full w-7 rounded-none rounded-r-2xl text-xs"
         onClick={() => actions.removeFilter(filter.columnId)}
       >
         <X className="size-4 -translate-x-0.5" />
@@ -104,7 +105,9 @@ export function ActiveFilter<TData, TType extends ColumnDataType>({
 
 export function ActiveFiltersMobileContainer({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode
+}) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [showLeftBlur, setShowLeftBlur] = useState(false)
   const [showRightBlur, setShowRightBlur] = useState(true)
@@ -153,13 +156,13 @@ export function ActiveFiltersMobileContainer({
     <div className="relative w-full overflow-x-hidden">
       {/* Left blur effect */}
       {showLeftBlur && (
-        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-background to-transparent animate-in fade-in-0" />
+        <div className="from-background animate-in fade-in-0 pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-16 bg-gradient-to-r to-transparent" />
       )}
 
       {/* Scrollable container */}
       <div
         ref={scrollContainerRef}
-        className="flex gap-2 overflow-x-scroll no-scrollbar"
+        className="no-scrollbar flex gap-2 overflow-x-scroll"
         onScroll={checkScroll}
       >
         {children}
@@ -167,7 +170,7 @@ export function ActiveFiltersMobileContainer({
 
       {/* Right blur effect */}
       {showRightBlur && (
-        <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-background to-transparent animate-in fade-in-0 " />
+        <div className="from-background animate-in fade-in-0 pointer-events-none absolute top-0 right-0 bottom-0 z-10 w-16 bg-gradient-to-l to-transparent" />
       )}
     </div>
   )

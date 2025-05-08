@@ -1,21 +1,4 @@
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
-import { ArrowRightIcon, ChevronRightIcon, FilterIcon } from 'lucide-react'
-import {
+import React, {
   isValidElement,
   memo,
   useCallback,
@@ -23,19 +6,37 @@ import {
   useMemo,
   useRef,
   useState,
-} from 'react'
-import React from 'react'
+} from "react"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { ArrowRightIcon, ChevronRightIcon, FilterIcon } from "lucide-react"
+
 import type {
   Column,
   ColumnDataType,
   DataTableFilterActions,
-  FilterStrategy,
   FiltersState,
-} from '../core/types'
-import { isAnyOf } from '../lib/array'
-import { getColumn } from '../lib/helpers'
-import { type Locale, t } from '../lib/i18n'
-import { FilterValueController } from './filter-value'
+  FilterStrategy,
+} from "../core/types"
+import type { Locale } from "../lib/i18n"
+import { isAnyOf } from "../lib/array"
+import { getColumn } from "../lib/helpers"
+import { t } from "../lib/i18n"
+import { FilterValueController } from "./filter-value"
 
 interface FilterSelectorProps<TData> {
   filters: FiltersState
@@ -52,10 +53,10 @@ function __FilterSelector<TData>({
   columns,
   actions,
   strategy,
-  locale = 'en',
+  locale = "en",
 }: FilterSelectorProps<TData>) {
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("")
   const [property, setProperty] = useState<string | undefined>(undefined)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -69,12 +70,12 @@ function __FilterSelector<TData>({
   useEffect(() => {
     if (property && inputRef) {
       inputRef.current?.focus()
-      setValue('')
+      setValue("")
     }
   }, [property])
 
   useEffect(() => {
-    if (!open) setTimeout(() => setValue(''), 150)
+    if (!open) setTimeout(() => setValue(""), 150)
   }, [open])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: need filters to be updated
@@ -92,7 +93,7 @@ function __FilterSelector<TData>({
         <Command
           loop
           filter={(value, search, keywords) => {
-            const extendValue = `${value} ${keywords?.join(' ')}`
+            const extendValue = `${value} ${keywords?.join(" ")}`
             return extendValue.toLowerCase().includes(search.toLowerCase())
               ? 1
               : 0
@@ -102,9 +103,9 @@ function __FilterSelector<TData>({
             value={value}
             onValueChange={setValue}
             ref={inputRef}
-            placeholder={t('search', locale)}
+            placeholder={t("search", locale)}
           />
-          <CommandEmpty>{t('noresults', locale)}</CommandEmpty>
+          <CommandEmpty>{t("noresults", locale)}</CommandEmpty>
           <CommandList className="max-h-fit">
             <CommandGroup>
               {columns.map((column) => (
@@ -140,16 +141,16 @@ function __FilterSelector<TData>({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={cn('h-7', hasFilters && 'w-fit !px-2')}
+          className={cn("h-7", hasFilters && "w-fit !px-2")}
         >
           <FilterIcon className="size-4" />
-          {!hasFilters && <span>{t('filter', locale)}</span>}
+          {!hasFilters && <span>{t("filter", locale)}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent
         align="start"
         side="bottom"
-        className="w-fit p-0 origin-(--radix-popover-content-transform-origin)"
+        className="w-fit origin-(--radix-popover-content-transform-origin) p-0"
       >
         {content}
       </PopoverContent>
@@ -181,8 +182,8 @@ export function FilterableColumn<TData, TType extends ColumnDataType, TVal>({
     // Set up MutationObserver
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (mutation.type === 'attributes') {
-          const isSelected = target.getAttribute('data-selected') === 'true'
+        if (mutation.type === "attributes") {
+          const isSelected = target.getAttribute("data-selected") === "true"
           if (isSelected) prefetch()
         }
       }
@@ -191,7 +192,7 @@ export function FilterableColumn<TData, TType extends ColumnDataType, TVal>({
     // Set up observer
     observer.observe(target, {
       attributes: true,
-      attributeFilter: ['data-selected'],
+      attributeFilter: ["data-selected"],
     })
 
     // Cleanup on unmount
@@ -237,14 +238,14 @@ function __QuickSearchFilters<TData>({
   columns,
   actions,
   strategy,
-  locale = 'en',
+  locale = "en",
 }: QuickSearchFiltersProps<TData>) {
   if (!search || search.trim().length < 2) return null
 
   const cols = useMemo(
     () =>
       columns.filter((c) =>
-        isAnyOf<ColumnDataType>(c.type, ['option', 'multiOption']),
+        isAnyOf<ColumnDataType>(c.type, ["option", "multiOption"]),
       ),
     [columns],
   )
@@ -277,34 +278,34 @@ function __QuickSearchFilters<TData>({
                   }}
                   className="group"
                 >
-                  <div className="flex items-center gap-1.5 group">
+                  <div className="group flex items-center gap-1.5">
                     <Checkbox
                       checked={checked}
-                      className="opacity-0 data-[state=checked]:opacity-100 group-data-[selected=true]:opacity-100 dark:border-ring mr-1"
+                      className="dark:border-ring mr-1 opacity-0 group-data-[selected=true]:opacity-100 data-[state=checked]:opacity-100"
                     />
-                    <div className="flex items-center w-4 justify-center">
+                    <div className="flex w-4 items-center justify-center">
                       {v.icon &&
                         (isValidElement(v.icon) ? (
                           v.icon
                         ) : (
-                          <v.icon className="size-4 text-primary" />
+                          <v.icon className="text-primary size-4" />
                         ))}
                     </div>
                     <div className="flex items-center gap-0.5">
                       <span className="text-muted-foreground">
                         {column.displayName}
                       </span>
-                      <ChevronRightIcon className="size-3.5 text-muted-foreground/75" />
+                      <ChevronRightIcon className="text-muted-foreground/75 size-3.5" />
                       <span>
                         {v.label}
                         <sup
                           className={cn(
-                            !optionsCount && 'hidden',
-                            'ml-0.5 tabular-nums tracking-tight text-muted-foreground',
-                            count === 0 && 'slashed-zero',
+                            !optionsCount && "hidden",
+                            "text-muted-foreground ml-0.5 tracking-tight tabular-nums",
+                            count === 0 && "slashed-zero",
                           )}
                         >
-                          {count < 100 ? count : '100+'}
+                          {count < 100 ? count : "100+"}
                         </sup>
                       </span>
                     </div>

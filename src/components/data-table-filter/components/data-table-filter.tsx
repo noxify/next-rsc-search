@@ -1,16 +1,17 @@
-'use client'
+"use client"
 
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useIsMobile } from "@/hooks/use-mobile"
+
 import type {
   Column,
   DataTableFilterActions,
-  FilterStrategy,
   FiltersState,
-} from '../core/types'
-import type { Locale } from '../lib/i18n'
-import { ActiveFilters, ActiveFiltersMobileContainer } from './active-filters'
-import { FilterActions } from './filter-actions'
-import { FilterSelector } from './filter-selector'
+  FilterStrategy,
+} from "../core/types"
+import type { Locale } from "../lib/i18n"
+import { ActiveFilters, ActiveFiltersMobileContainer } from "./active-filters"
+import { FilterActions } from "./filter-actions"
+import { FilterSelector } from "./filter-selector"
 
 interface DataTableFilterProps<TData> {
   columns: Column<TData>[]
@@ -25,7 +26,7 @@ export function DataTableFilter<TData>({
   filters,
   actions,
   strategy,
-  locale = 'en',
+  locale = "en",
 }: DataTableFilterProps<TData>) {
   const isMobile = useIsMobile()
   if (isMobile) {
@@ -60,7 +61,7 @@ export function DataTableFilter<TData>({
 
   return (
     <div className="flex w-full items-start justify-between gap-2">
-      <div className="flex md:flex-wrap gap-2 w-full flex-1">
+      <div className="flex w-full flex-1 gap-2 md:flex-wrap">
         <FilterSelector
           columns={columns}
           filters={filters}

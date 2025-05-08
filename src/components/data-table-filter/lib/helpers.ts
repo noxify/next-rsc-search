@@ -1,5 +1,6 @@
-import { isBefore } from 'date-fns'
-import type { Column, ColumnOption } from '../core/types'
+import { isBefore } from "date-fns"
+
+import type { Column, ColumnOption } from "../core/types"
 
 export function getColumn<TData>(columns: Column<TData>[], id: string) {
   const column = columns.find((c) => c.id === id)
@@ -26,7 +27,7 @@ export function createDateFilterValue(
   if (!values || values.length === 0) return []
   if (values.length === 1) return [values[0]]
   if (values.length === 2) return createDateRange(values)
-  throw new Error('Cannot create date filter value from more than 2 values')
+  throw new Error("Cannot create date filter value from more than 2 values")
 }
 
 export function createDateRange(values: [Date, Date]) {
@@ -55,10 +56,10 @@ export function createNumberRange(values: number[] | undefined) {
 
 export function isColumnOption(value: unknown): value is ColumnOption {
   return (
-    typeof value === 'object' &&
+    typeof value === "object" &&
     value !== null &&
-    'value' in value &&
-    'label' in value
+    "value" in value &&
+    "label" in value
   )
 }
 
@@ -67,7 +68,7 @@ export function isColumnOptionArray(value: unknown): value is ColumnOption[] {
 }
 
 export function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((v) => typeof v === 'string')
+  return Array.isArray(value) && value.every((v) => typeof v === "string")
 }
 
 export function isColumnOptionMap(
@@ -77,12 +78,12 @@ export function isColumnOptionMap(
     return false
   }
   for (const key of value.keys()) {
-    if (typeof key !== 'string') {
+    if (typeof key !== "string") {
       return false
     }
   }
   for (const val of value.values()) {
-    if (typeof val !== 'number') {
+    if (typeof val !== "number") {
       return false
     }
   }
@@ -93,7 +94,7 @@ export function isMinMaxTuple(value: unknown): value is [number, number] {
   return (
     Array.isArray(value) &&
     value.length === 2 &&
-    typeof value[0] === 'number' &&
-    typeof value[1] === 'number'
+    typeof value[0] === "number" &&
+    typeof value[1] === "number"
   )
 }

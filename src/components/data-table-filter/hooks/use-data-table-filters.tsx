@@ -1,30 +1,30 @@
-'use client'
+"use client"
 
-import type React from 'react'
-import { useMemo, useState } from 'react'
-import { createColumns } from '../core/filters'
-import { DEFAULT_OPERATORS, determineNewOperator } from '../core/operators'
+import type React from "react"
+import { useMemo, useState } from "react"
+
 import type {
   ColumnConfig,
   ColumnDataType,
   ColumnOption,
   DataTableFilterActions,
   FilterModel,
-  FilterStrategy,
   FiltersState,
+  FilterStrategy,
   NumberColumnIds,
   OptionBasedColumnDataType,
   OptionColumnIds,
-} from '../core/types'
-import { uniq } from '../lib/array'
-import { addUniq, removeUniq } from '../lib/array'
+} from "../core/types"
+import { createColumns } from "../core/filters"
+import { DEFAULT_OPERATORS, determineNewOperator } from "../core/operators"
+import { addUniq, removeUniq, uniq } from "../lib/array"
 import {
   createDateFilterValue,
   createNumberFilterValue,
   isColumnOptionArray,
   isColumnOptionMap,
   isMinMaxTuple,
-} from '../lib/helpers'
+} from "../lib/helpers"
 
 export interface DataTableFiltersOptions<
   TData,
@@ -69,7 +69,7 @@ export function useDataTableFilters<
     (!externalFilters && onFiltersChange)
   ) {
     throw new Error(
-      'If using controlled state, you must specify both filters and onFiltersChange.',
+      "If using controlled state, you must specify both filters and onFiltersChange.",
     )
   }
 
@@ -84,7 +84,7 @@ export function useDataTableFilters<
       // Set options, if exists
       if (
         options &&
-        (config.type === 'option' || config.type === 'multiOption')
+        (config.type === "option" || config.type === "multiOption")
       ) {
         const optionsInput = options[config.id as OptionColumnIds<TColumns>]
         if (!optionsInput || !isColumnOptionArray(optionsInput)) return config
@@ -95,7 +95,7 @@ export function useDataTableFilters<
       // Set faceted options, if exists
       if (
         faceted &&
-        (config.type === 'option' || config.type === 'multiOption')
+        (config.type === "option" || config.type === "multiOption")
       ) {
         const facetedOptionsInput =
           faceted[config.id as OptionColumnIds<TColumns>]
@@ -106,7 +106,7 @@ export function useDataTableFilters<
       }
 
       // Set faceted min/max values, if exists
-      if (config.type === 'number' && faceted) {
+      if (config.type === "number" && faceted) {
         const minMaxTuple = faceted[config.id as NumberColumnIds<TColumns>]
         if (!minMaxTuple || !isMinMaxTuple(minMaxTuple)) return config
 
@@ -127,9 +127,9 @@ export function useDataTableFilters<
     () => ({
       addFilterValue<TData, TType extends OptionBasedColumnDataType>(
         column: ColumnConfig<TData, TType>,
-        values: FilterModel<TType>['values'],
+        values: FilterModel<TType>["values"],
       ) {
-        if (column.type === 'option') {
+        if (column.type === "option") {
           setFilters((prev) => {
             const filter = prev.find((f) => f.columnId === column.id)
             const isColumnFiltered = filter && filter.values.length > 0
@@ -150,7 +150,7 @@ export function useDataTableFilters<
             const oldValues = filter.values
             const newValues = addUniq(filter.values, values)
             const newOperator = determineNewOperator(
-              'option',
+              "option",
               oldValues,
               newValues,
               filter.operator,
@@ -168,7 +168,7 @@ export function useDataTableFilters<
           })
           return
         }
-        if (column.type === 'multiOption') {
+        if (column.type === "multiOption") {
           setFilters((prev) => {
             const filter = prev.find((f) => f.columnId === column.id)
             const isColumnFiltered = filter && filter.values.length > 0
@@ -189,7 +189,7 @@ export function useDataTableFilters<
             const oldValues = filter.values
             const newValues = addUniq(filter.values, values)
             const newOperator = determineNewOperator(
-              'multiOption',
+              "multiOption",
               oldValues,
               newValues,
               filter.operator,
@@ -211,14 +211,14 @@ export function useDataTableFilters<
           return
         }
         throw new Error(
-          '[data-table-filter] addFilterValue() is only supported for option columns',
+          "[data-table-filter] addFilterValue() is only supported for option columns",
         )
       },
       removeFilterValue<TData, TType extends OptionBasedColumnDataType>(
         column: ColumnConfig<TData, TType>,
-        value: FilterModel<TType>['values'],
+        value: FilterModel<TType>["values"],
       ) {
-        if (column.type === 'option') {
+        if (column.type === "option") {
           setFilters((prev) => {
             const filter = prev.find((f) => f.columnId === column.id)
             const isColumnFiltered = filter && filter.values.length > 0
@@ -228,7 +228,7 @@ export function useDataTableFilters<
             const newValues = removeUniq(filter.values, value)
             const oldValues = filter.values
             const newOperator = determineNewOperator(
-              'option',
+              "option",
               oldValues,
               newValues,
               filter.operator,
@@ -249,7 +249,7 @@ export function useDataTableFilters<
           })
           return
         }
-        if (column.type === 'multiOption') {
+        if (column.type === "multiOption") {
           setFilters((prev) => {
             const filter = prev.find((f) => f.columnId === column.id)
             const isColumnFiltered = filter && filter.values.length > 0
@@ -259,7 +259,7 @@ export function useDataTableFilters<
             const newValues = removeUniq(filter.values, value)
             const oldValues = filter.values
             const newOperator = determineNewOperator(
-              'multiOption',
+              "multiOption",
               oldValues,
               newValues,
               filter.operator,
@@ -281,20 +281,20 @@ export function useDataTableFilters<
           return
         }
         throw new Error(
-          '[data-table-filter] removeFilterValue() is only supported for option columns',
+          "[data-table-filter] removeFilterValue() is only supported for option columns",
         )
       },
       setFilterValue<TData, TType extends ColumnDataType>(
         column: ColumnConfig<TData, TType>,
-        values: FilterModel<TType>['values'],
+        values: FilterModel<TType>["values"],
       ) {
         setFilters((prev) => {
           const filter = prev.find((f) => f.columnId === column.id)
           const isColumnFiltered = filter && filter.values.length > 0
           const newValues =
-            column.type === 'number'
+            column.type === "number"
               ? createNumberFilterValue(values as number[])
-              : column.type === 'date'
+              : column.type === "date"
                 ? createDateFilterValue(
                     values as [Date, Date] | [Date] | [] | undefined,
                   )
@@ -332,7 +332,7 @@ export function useDataTableFilters<
       },
       setFilterOperator<TType extends ColumnDataType>(
         columnId: string,
-        operator: FilterModel<TType>['operator'],
+        operator: FilterModel<TType>["operator"],
       ) {
         setFilters((prev) =>
           prev.map((f) => (f.columnId === columnId ? { ...f, operator } : f)),

@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from "lucide-react"
 
 /*
  * # GENERAL NOTES:
@@ -38,20 +38,20 @@ export interface ColumnOptionExtended extends ColumnOption {
  */
 export type ColumnDataType =
   /* The column value is a string that should be searchable. */
-  | 'text'
-  | 'number'
-  | 'date'
+  | "text"
+  | "number"
+  | "date"
   /* The column value can be a single value from a list of options. */
-  | 'option'
+  | "option"
   /* The column value can be zero or more values from a list of options. */
-  | 'multiOption'
+  | "multiOption"
 
 /*
  * Represents the data type (kind) of option and multi-option columns.
  */
 export type OptionBasedColumnDataType = Extract<
   ColumnDataType,
-  'option' | 'multiOption'
+  "option" | "multiOption"
 >
 
 /*
@@ -114,22 +114,23 @@ export type ColumnConfig<
   facetedOptions?: TType extends OptionBasedColumnDataType
     ? Map<string, number>
     : never
-  min?: TType extends 'number' ? number : never
-  max?: TType extends 'number' ? number : never
+  min?: TType extends "number" ? number : never
+  max?: TType extends "number" ? number : never
   transformOptionFn?: TType extends OptionBasedColumnDataType
     ? TTransformOptionFn<TVal>
     : never
   orderFn?: TType extends OptionBasedColumnDataType ? TOrderFn<TVal> : never
 }
 
-export type OptionColumnId<T> = T extends ColumnConfig<
-  infer TData,
-  'option' | 'multiOption',
-  infer TVal,
-  infer TId
->
-  ? TId
-  : never
+export type OptionColumnId<T> =
+  T extends ColumnConfig<
+    infer TData,
+    "option" | "multiOption",
+    infer TVal,
+    infer TId
+  >
+    ? TId
+    : never
 
 export type OptionColumnIds<
   T extends ReadonlyArray<ColumnConfig<any, any, any, any>>,
@@ -137,14 +138,10 @@ export type OptionColumnIds<
   [K in keyof T]: OptionColumnId<T[K]>
 }[number]
 
-export type NumberColumnId<T> = T extends ColumnConfig<
-  infer TData,
-  'number',
-  infer TVal,
-  infer TId
->
-  ? TId
-  : never
+export type NumberColumnId<T> =
+  T extends ColumnConfig<infer TData, "number", infer TVal, infer TId>
+    ? TId
+    : never
 
 export type NumberColumnIds<
   T extends ReadonlyArray<ColumnConfig<any, any, any, any>>,
@@ -162,7 +159,7 @@ export type ColumnConfigHelper<TData> = {
     TVal extends ReturnType<TAccessor>,
   >(
     accessor: TAccessor,
-    config?: Omit<ColumnConfig<TData, TType, TVal>, 'accessor'>,
+    config?: Omit<ColumnConfig<TData, TType, TVal>, "accessor">,
   ) => ColumnConfig<TData, TType, unknown>
 }
 
@@ -204,22 +201,22 @@ export type Column<
 export interface DataTableFilterActions {
   addFilterValue: <TData, TType extends OptionBasedColumnDataType>(
     column: Column<TData, TType>,
-    values: FilterModel<TType>['values'],
+    values: FilterModel<TType>["values"],
   ) => void
 
   removeFilterValue: <TData, TType extends OptionBasedColumnDataType>(
     column: Column<TData, TType>,
-    value: FilterModel<TType>['values'],
+    value: FilterModel<TType>["values"],
   ) => void
 
   setFilterValue: <TData, TType extends ColumnDataType>(
     column: Column<TData, TType>,
-    values: FilterModel<TType>['values'],
+    values: FilterModel<TType>["values"],
   ) => void
 
   setFilterOperator: <TType extends ColumnDataType>(
     columnId: string,
-    operator: FilterModel<TType>['operator'],
+    operator: FilterModel<TType>["operator"],
   ) => void
 
   removeFilter: (columnId: string) => void
@@ -227,44 +224,44 @@ export interface DataTableFilterActions {
   removeAllFilters: () => void
 }
 
-export type FilterStrategy = 'client' | 'server'
+export type FilterStrategy = "client" | "server"
 
 /* Operators for text data */
-export type TextFilterOperator = 'contains' | 'does not contain'
+export type TextFilterOperator = "contains" | "does not contain"
 
 /* Operators for number data */
 export type NumberFilterOperator =
-  | 'is'
-  | 'is not'
-  | 'is less than'
-  | 'is greater than or equal to'
-  | 'is greater than'
-  | 'is less than or equal to'
-  | 'is between'
-  | 'is not between'
+  | "is"
+  | "is not"
+  | "is less than"
+  | "is greater than or equal to"
+  | "is greater than"
+  | "is less than or equal to"
+  | "is between"
+  | "is not between"
 
 /* Operators for date data */
 export type DateFilterOperator =
-  | 'is'
-  | 'is not'
-  | 'is before'
-  | 'is on or after'
-  | 'is after'
-  | 'is on or before'
-  | 'is between'
-  | 'is not between'
+  | "is"
+  | "is not"
+  | "is before"
+  | "is on or after"
+  | "is after"
+  | "is on or before"
+  | "is between"
+  | "is not between"
 
 /* Operators for option data */
-export type OptionFilterOperator = 'is' | 'is not' | 'is any of' | 'is none of'
+export type OptionFilterOperator = "is" | "is not" | "is any of" | "is none of"
 
 /* Operators for multi-option data */
 export type MultiOptionFilterOperator =
-  | 'include'
-  | 'exclude'
-  | 'include any of'
-  | 'include all of'
-  | 'exclude if any of'
-  | 'exclude if all'
+  | "include"
+  | "exclude"
+  | "include any of"
+  | "include all of"
+  | "exclude if any of"
+  | "exclude if all"
 
 /* Maps filter operators to their respective data types */
 export type FilterOperators = {
@@ -300,7 +297,7 @@ export type FilterDetails<T extends ColumnDataType> = {
   [key in FilterOperators[T]]: FilterOperatorDetails<key, T>
 }
 
-export type FilterOperatorTarget = 'single' | 'multiple'
+export type FilterOperatorTarget = "single" | "multiple"
 
 export type FilterOperatorDetailsBase<
   OperatorValue,
@@ -338,8 +335,8 @@ export type FilterOperatorDetails<
 > = FilterOperatorDetailsBase<OperatorValue, T> &
   (
     | { singularOf?: never; pluralOf?: never }
-    | { target: 'single'; singularOf: FilterOperators[T]; pluralOf?: never }
-    | { target: 'multiple'; singularOf?: never; pluralOf: FilterOperators[T] }
+    | { target: "single"; singularOf: FilterOperators[T]; pluralOf?: never }
+    | { target: "multiple"; singularOf?: never; pluralOf: FilterOperators[T] }
   ) &
   (
     | { isNegated: false; negation: FilterOperators[T]; negationOf?: never }

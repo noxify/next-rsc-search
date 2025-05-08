@@ -1,6 +1,6 @@
-import en from '../locales/en.json'
+import en from "../locales/en.json"
 
-export type Locale = 'en'
+export type Locale = "en"
 
 type Translations = Record<string, string>
 

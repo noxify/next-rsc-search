@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef } from 'react'
-import { debounce } from '../lib/debounce'
-import { useUnmount } from './use-unmount'
+import { useEffect, useMemo, useRef } from "react"
+
+import { debounce } from "../lib/debounce"
+import { useUnmount } from "./use-unmount"
 
 type DebounceOptions = {
   leading?: boolean

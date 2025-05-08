@@ -1,6 +1,3 @@
-import { isAnyOf, uniq } from '../lib/array'
-import { isColumnOptionArray } from '../lib/helpers'
-import { memo } from '../lib/memo'
 import type {
   Column,
   ColumnConfig,
@@ -12,7 +9,10 @@ import type {
   TAccessorFn,
   TOrderFn,
   TTransformOptionFn,
-} from './types'
+} from "./types"
+import { isAnyOf, uniq } from "../lib/array"
+import { isColumnOptionArray } from "../lib/helpers"
+import { memo } from "../lib/memo"
 
 class ColumnConfigBuilder<
   TData,
@@ -66,12 +66,12 @@ class ColumnConfigBuilder<
     value: number,
   ): ColumnConfigBuilder<
     TData,
-    TType extends 'number' ? TType : never,
+    TType extends "number" ? TType : never,
     TVal,
     TId
   > {
-    if (this.config.type !== 'number') {
-      throw new Error('min() is only applicable to number columns')
+    if (this.config.type !== "number") {
+      throw new Error("min() is only applicable to number columns")
     }
     const newInstance = this.clone() as any
     newInstance.config.min = value
@@ -82,12 +82,12 @@ class ColumnConfigBuilder<
     value: number,
   ): ColumnConfigBuilder<
     TData,
-    TType extends 'number' ? TType : never,
+    TType extends "number" ? TType : never,
     TVal,
     TId
   > {
-    if (this.config.type !== 'number') {
-      throw new Error('max() is only applicable to number columns')
+    if (this.config.type !== "number") {
+      throw new Error("max() is only applicable to number columns")
     }
     const newInstance = this.clone() as any
     newInstance.config.max = value
@@ -98,13 +98,13 @@ class ColumnConfigBuilder<
     value: ColumnOption[],
   ): ColumnConfigBuilder<
     TData,
-    TType extends 'option' | 'multiOption' ? TType : never,
+    TType extends "option" | "multiOption" ? TType : never,
     TVal,
     TId
   > {
-    if (!isAnyOf(this.config.type, ['option', 'multiOption'])) {
+    if (!isAnyOf(this.config.type, ["option", "multiOption"])) {
       throw new Error(
-        'options() is only applicable to option or multiOption columns',
+        "options() is only applicable to option or multiOption columns",
       )
     }
     const newInstance = this.clone() as any
@@ -116,13 +116,13 @@ class ColumnConfigBuilder<
     fn: TTransformOptionFn<TVal>,
   ): ColumnConfigBuilder<
     TData,
-    TType extends 'option' | 'multiOption' ? TType : never,
+    TType extends "option" | "multiOption" ? TType : never,
     TVal,
     TId
   > {
-    if (!isAnyOf(this.config.type, ['option', 'multiOption'])) {
+    if (!isAnyOf(this.config.type, ["option", "multiOption"])) {
       throw new Error(
-        'transformOptionFn() is only applicable to option or multiOption columns',
+        "transformOptionFn() is only applicable to option or multiOption columns",
       )
     }
     const newInstance = this.clone() as any
@@ -134,13 +134,13 @@ class ColumnConfigBuilder<
     fn: TOrderFn<TVal>,
   ): ColumnConfigBuilder<
     TData,
-    TType extends 'option' | 'multiOption' ? TType : never,
+    TType extends "option" | "multiOption" ? TType : never,
     TVal,
     TId
   > {
-    if (!isAnyOf(this.config.type, ['option', 'multiOption'])) {
+    if (!isAnyOf(this.config.type, ["option", "multiOption"])) {
       throw new Error(
-        'orderFn() is only applicable to option or multiOption columns',
+        "orderFn() is only applicable to option or multiOption columns",
       )
     }
     const newInstance = this.clone() as any
@@ -149,21 +149,21 @@ class ColumnConfigBuilder<
   }
 
   build(): ColumnConfig<TData, TType, TVal, TId> {
-    if (!this.config.id) throw new Error('id is required')
-    if (!this.config.accessor) throw new Error('accessor is required')
-    if (!this.config.displayName) throw new Error('displayName is required')
-    if (!this.config.icon) throw new Error('icon is required')
+    if (!this.config.id) throw new Error("id is required")
+    if (!this.config.accessor) throw new Error("accessor is required")
+    if (!this.config.displayName) throw new Error("displayName is required")
+    if (!this.config.icon) throw new Error("icon is required")
     return this.config as ColumnConfig<TData, TType, TVal, TId>
   }
 }
 
 // Update the helper interface
 interface FluentColumnConfigHelper<TData> {
-  text: () => ColumnConfigBuilder<TData, 'text', string>
-  number: () => ColumnConfigBuilder<TData, 'number', number>
-  date: () => ColumnConfigBuilder<TData, 'date', Date>
-  option: () => ColumnConfigBuilder<TData, 'option', string>
-  multiOption: () => ColumnConfigBuilder<TData, 'multiOption', string[]>
+  text: () => ColumnConfigBuilder<TData, "text", string>
+  number: () => ColumnConfigBuilder<TData, "number", number>
+  date: () => ColumnConfigBuilder<TData, "date", Date>
+  option: () => ColumnConfigBuilder<TData, "option", string>
+  multiOption: () => ColumnConfigBuilder<TData, "multiOption", string[]>
 }
 
 // Factory function remains mostly the same
@@ -171,12 +171,12 @@ export function createColumnConfigHelper<
   TData,
 >(): FluentColumnConfigHelper<TData> {
   return {
-    text: () => new ColumnConfigBuilder<TData, 'text', string>('text'),
-    number: () => new ColumnConfigBuilder<TData, 'number', number>('number'),
-    date: () => new ColumnConfigBuilder<TData, 'date', Date>('date'),
-    option: () => new ColumnConfigBuilder<TData, 'option', string>('option'),
+    text: () => new ColumnConfigBuilder<TData, "text", string>("text"),
+    number: () => new ColumnConfigBuilder<TData, "number", number>("number"),
+    date: () => new ColumnConfigBuilder<TData, "date", Date>("date"),
+    option: () => new ColumnConfigBuilder<TData, "option", string>("option"),
     multiOption: () =>
-      new ColumnConfigBuilder<TData, 'multiOption', string[]>('multiOption'),
+      new ColumnConfigBuilder<TData, "multiOption", string[]>("multiOption"),
   }
 }
 
@@ -185,15 +185,15 @@ export function getColumnOptions<TData, TType extends ColumnDataType, TVal>(
   data: TData[],
   strategy: FilterStrategy,
 ): ColumnOption[] {
-  if (!isAnyOf(column.type, ['option', 'multiOption'])) {
+  if (!isAnyOf(column.type, ["option", "multiOption"])) {
     console.warn(
-      'Column options can only be retrieved for option and multiOption columns',
+      "Column options can only be retrieved for option and multiOption columns",
     )
     return []
   }
 
-  if (strategy === 'server' && !column.options) {
-    throw new Error('column options are required for server-side filtering')
+  if (strategy === "server" && !column.options) {
+    throw new Error("column options are required for server-side filtering")
   }
 
   if (column.options) {
@@ -253,7 +253,7 @@ export function getColumnValues<TData, TType extends ColumnDataType, TVal>(
 
   const raw = memoizedAccessor()
 
-  if (!isAnyOf(column.type, ['option', 'multiOption'])) {
+  if (!isAnyOf(column.type, ["option", "multiOption"])) {
     return raw
   }
 
@@ -293,14 +293,14 @@ export function getFacetedUniqueValues<
   values: string[] | ColumnOption[],
   strategy: FilterStrategy,
 ): Map<string, number> | undefined {
-  if (!isAnyOf(column.type, ['option', 'multiOption'])) {
+  if (!isAnyOf(column.type, ["option", "multiOption"])) {
     console.warn(
-      'Faceted unique values can only be retrieved for option and multiOption columns',
+      "Faceted unique values can only be retrieved for option and multiOption columns",
     )
     return new Map<string, number>()
   }
 
-  if (strategy === 'server') {
+  if (strategy === "server") {
     return column.facetedOptions
   }
 
@@ -330,19 +330,19 @@ export function getFacetedMinMaxValues<
   data: TData[],
   strategy: FilterStrategy,
 ): [number, number] | undefined {
-  if (column.type !== 'number') return undefined // Only applicable to number columns
+  if (column.type !== "number") return undefined // Only applicable to number columns
 
-  if (typeof column.min === 'number' && typeof column.max === 'number') {
+  if (typeof column.min === "number" && typeof column.max === "number") {
     return [column.min, column.max]
   }
 
-  if (strategy === 'server') {
+  if (strategy === "server") {
     return undefined
   }
 
   const values = data
     .flatMap((row) => column.accessor(row) as Nullable<number>)
-    .filter((v): v is number => typeof v === 'number' && !Number.isNaN(v))
+    .filter((v): v is number => typeof v === "number" && !Number.isNaN(v))
 
   if (values.length === 0) {
     return [0, 0] // Fallback to config or reasonable defaults
@@ -369,7 +369,7 @@ export function createColumns<TData>(
 
     const getValues: () => ElementType<NonNullable<any>>[] = memo(
       () => [data, strategy],
-      () => (strategy === 'client' ? getColumnValues(columnConfig, data) : []),
+      () => (strategy === "client" ? getColumnValues(columnConfig, data) : []),
       { key: `values-${columnConfig.id}` },
     )
 
@@ -404,7 +404,7 @@ export function createColumns<TData>(
       _prefetchedFacetedMinMaxValuesCache: null,
     }
 
-    if (strategy === 'client') {
+    if (strategy === "client") {
       // Define prefetch methods with access to the column instance
       column.prefetchOptions = async (): Promise<void> => {
         if (!column._prefetchedOptionsCache) {
