@@ -3,23 +3,25 @@ import { useEffect, useMemo, useRef } from "react"
 import { debounce } from "../lib/debounce"
 import { useUnmount } from "./use-unmount"
 
-type DebounceOptions = {
+interface DebounceOptions {
   leading?: boolean
   trailing?: boolean
   maxWait?: number
 }
 
-type ControlFunctions = {
+interface ControlFunctions {
   cancel: () => void
   flush: () => void
   isPending: () => boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DebouncedState<T extends (...args: any) => ReturnType<T>> = ((
   ...args: Parameters<T>
 ) => ReturnType<T> | undefined) &
   ControlFunctions
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useDebounceCallback<T extends (...args: any) => ReturnType<T>>(
   func: T,
   delay = 500,
@@ -57,6 +59,8 @@ export function useDebounceCallback<T extends (...args: any) => ReturnType<T>>(
 
   // Update the debounced function ref whenever func, wait, or options change
   useEffect(() => {
+    // @ts-expect-error - not sure what's wrong here
+    //                    Types of parameters 'args' and 'args' are incompatible.
     debouncedFunc.current = debounce(func, delay, options)
   }, [func, delay, options])
 

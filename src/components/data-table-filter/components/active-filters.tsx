@@ -40,6 +40,7 @@ export function ActiveFilters<TData>({
         const column = getColumn(columns, id)
 
         // Skip if no filter value
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!filter.values) return null
 
         return (

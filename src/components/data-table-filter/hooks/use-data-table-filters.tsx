@@ -28,7 +28,8 @@ import {
 
 export interface DataTableFiltersOptions<
   TData,
-  TColumns extends ReadonlyArray<ColumnConfig<TData, any, any, any>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TColumns extends readonly ColumnConfig<TData, any, any, any>[],
   TStrategy extends FilterStrategy,
 > {
   strategy: TStrategy
@@ -48,7 +49,8 @@ export interface DataTableFiltersOptions<
 
 export function useDataTableFilters<
   TData,
-  TColumns extends ReadonlyArray<ColumnConfig<TData, any, any, any>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TColumns extends readonly ColumnConfig<TData, any, any, any>[],
   TStrategy extends FilterStrategy,
 >({
   strategy,
@@ -149,6 +151,7 @@ export function useDataTableFilters<
             }
             const oldValues = filter.values
             const newValues = addUniq(filter.values, values)
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const newOperator = determineNewOperator(
               "option",
               oldValues,
@@ -160,6 +163,7 @@ export function useDataTableFilters<
                 ? {
                     columnId: column.id,
                     type: column.type,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     operator: newOperator,
                     values: newValues,
                   }
@@ -188,6 +192,7 @@ export function useDataTableFilters<
             }
             const oldValues = filter.values
             const newValues = addUniq(filter.values, values)
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const newOperator = determineNewOperator(
               "multiOption",
               oldValues,
@@ -202,6 +207,7 @@ export function useDataTableFilters<
                 ? {
                     columnId: column.id,
                     type: column.type,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     operator: newOperator,
                     values: newValues,
                   }
@@ -227,6 +233,7 @@ export function useDataTableFilters<
             }
             const newValues = removeUniq(filter.values, value)
             const oldValues = filter.values
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const newOperator = determineNewOperator(
               "option",
               oldValues,
@@ -241,6 +248,7 @@ export function useDataTableFilters<
                 ? {
                     columnId: column.id,
                     type: column.type,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     operator: newOperator,
                     values: newValues,
                   }
@@ -258,6 +266,7 @@ export function useDataTableFilters<
             }
             const newValues = removeUniq(filter.values, value)
             const oldValues = filter.values
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const newOperator = determineNewOperator(
               "multiOption",
               oldValues,
@@ -272,6 +281,7 @@ export function useDataTableFilters<
                 ? {
                     columnId: column.id,
                     type: column.type,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     operator: newOperator,
                     values: newValues,
                   }
@@ -315,6 +325,7 @@ export function useDataTableFilters<
             ]
           }
           const oldValues = filter.values
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const newOperator = determineNewOperator(
             column.type,
             oldValues,
@@ -324,7 +335,9 @@ export function useDataTableFilters<
           const newFilter = {
             columnId: column.id,
             type: column.type,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             operator: newOperator,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
             values: newValues as any,
           } satisfies FilterModel<TType>
           return prev.map((f) => (f.columnId === column.id ? newFilter : f))

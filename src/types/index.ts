@@ -1,8 +1,6 @@
-export interface SearchParams {
-  [key: string]: string | string[] | undefined
-}
+export type SearchParams = Record<string, string | string[] | undefined>
 
-export type Option = {
+export interface Option {
   label: string
   value: string
   icon?: React.ComponentType<{ className?: string }>

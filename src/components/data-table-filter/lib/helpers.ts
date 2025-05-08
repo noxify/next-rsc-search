@@ -26,6 +26,7 @@ export function createDateFilterValue(
 ) {
   if (!values || values.length === 0) return []
   if (values.length === 1) return [values[0]]
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (values.length === 2) return createDateRange(values)
   throw new Error("Cannot create date filter value from more than 2 values")
 }

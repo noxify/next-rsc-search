@@ -16,6 +16,7 @@ import { memo } from "../lib/memo"
 
 class ColumnConfigBuilder<
   TData,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TType extends ColumnDataType = any,
   TVal = unknown,
   TId extends string = string, // Add TId generic
@@ -28,7 +29,8 @@ class ColumnConfigBuilder<
 
   private clone(): ColumnConfigBuilder<TData, TType, TVal, TId> {
     const newInstance = new ColumnConfigBuilder<TData, TType, TVal, TId>(
-      this.config.type as TType,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.config.type!,
     )
     newInstance.config = { ...this.config }
     return newInstance
@@ -37,7 +39,9 @@ class ColumnConfigBuilder<
   id<TNewId extends string>(
     value: TNewId,
   ): ColumnConfigBuilder<TData, TType, TVal, TNewId> {
-    const newInstance = this.clone() as any // We'll refine this
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const newInstance = this.clone() as Record<string, any> // We'll refine this
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     newInstance.config.id = value
     return newInstance as ColumnConfigBuilder<TData, TType, TVal, TNewId>
   }
@@ -45,7 +49,9 @@ class ColumnConfigBuilder<
   accessor<TNewVal>(
     accessor: TAccessorFn<TData, TNewVal>,
   ): ColumnConfigBuilder<TData, TType, TNewVal, TId> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
     const newInstance = this.clone() as any
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     newInstance.config.accessor = accessor
     return newInstance as ColumnConfigBuilder<TData, TType, TNewVal, TId>
   }
@@ -56,8 +62,10 @@ class ColumnConfigBuilder<
     return newInstance
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon(value: any): ColumnConfigBuilder<TData, TType, TVal, TId> {
     const newInstance = this.clone()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     newInstance.config.icon = value
     return newInstance
   }
@@ -73,7 +81,14 @@ class ColumnConfigBuilder<
     if (this.config.type !== "number") {
       throw new Error("min() is only applicable to number columns")
     }
-    const newInstance = this.clone() as any
+
+    const newInstance = this.clone() as ColumnConfigBuilder<
+      TData,
+      TType extends "number" ? TType : never,
+      TVal,
+      TId
+    >
+
     newInstance.config.min = value
     return newInstance
   }
@@ -89,7 +104,12 @@ class ColumnConfigBuilder<
     if (this.config.type !== "number") {
       throw new Error("max() is only applicable to number columns")
     }
-    const newInstance = this.clone() as any
+    const newInstance = this.clone() as ColumnConfigBuilder<
+      TData,
+      TType extends "number" ? TType : never,
+      TVal,
+      TId
+    >
     newInstance.config.max = value
     return newInstance
   }
@@ -107,7 +127,12 @@ class ColumnConfigBuilder<
         "options() is only applicable to option or multiOption columns",
       )
     }
-    const newInstance = this.clone() as any
+    const newInstance = this.clone() as ColumnConfigBuilder<
+      TData,
+      TType extends "option" | "multiOption" ? TType : never,
+      TVal,
+      TId
+    >
     newInstance.config.options = value
     return newInstance
   }
@@ -125,7 +150,12 @@ class ColumnConfigBuilder<
         "transformOptionFn() is only applicable to option or multiOption columns",
       )
     }
-    const newInstance = this.clone() as any
+    const newInstance = this.clone() as ColumnConfigBuilder<
+      TData,
+      TType extends "option" | "multiOption" ? TType : never,
+      TVal,
+      TId
+    >
     newInstance.config.transformOptionFn = fn
     return newInstance
   }
@@ -143,7 +173,12 @@ class ColumnConfigBuilder<
         "orderFn() is only applicable to option or multiOption columns",
       )
     }
-    const newInstance = this.clone() as any
+    const newInstance = this.clone() as ColumnConfigBuilder<
+      TData,
+      TType extends "option" | "multiOption" ? TType : never,
+      TVal,
+      TId
+    >
     newInstance.config.orderFn = fn
     return newInstance
   }
@@ -208,6 +243,7 @@ export function getColumnOptions<TData, TType extends ColumnDataType, TVal>(
 
   if (column.orderFn) {
     models = models.sort((m1, m2) =>
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       column.orderFn!(
         m1 as ElementType<NonNullable<TVal>>,
         m2 as ElementType<NonNullable<TVal>>,
@@ -221,6 +257,7 @@ export function getColumnOptions<TData, TType extends ColumnDataType, TVal>(
       () => [models],
       (deps) =>
         deps[0].map((m) =>
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           column.transformOptionFn!(m as ElementType<NonNullable<TVal>>),
         ),
       { key: `transform-${column.id}` },
@@ -258,9 +295,12 @@ export function getColumnValues<TData, TType extends ColumnDataType, TVal>(
   }
 
   if (column.options) {
-    return raw
-      .map((v) => column.options?.find((o) => o.value === v)?.value)
-      .filter((v) => v !== undefined && v !== null)
+    return (
+      raw
+        .map((v) => column.options?.find((o) => o.value === v)?.value)
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        .filter((v) => v !== undefined && v !== null)
+    )
   }
 
   if (column.transformOptionFn) {
@@ -268,6 +308,7 @@ export function getColumnValues<TData, TType extends ColumnDataType, TVal>(
       () => [raw],
       (deps) =>
         deps[0].map(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           (v) => column.transformOptionFn!(v) as ElementType<NonNullable<TVal>>,
         ),
       { key: `transform-values-${column.id}` },
@@ -313,8 +354,8 @@ export function getFacetedUniqueValues<
     }
   } else {
     for (const option of values) {
-      const curr = acc.get(option as string) ?? 0
-      acc.set(option as string, curr + 1)
+      const curr = acc.get(option) ?? 0
+      acc.set(option, curr + 1)
     }
   }
 
@@ -356,19 +397,23 @@ export function getFacetedMinMaxValues<
 
 export function createColumns<TData>(
   data: TData[],
-  columnConfigs: ReadonlyArray<ColumnConfig<TData, any, any, any>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columnConfigs: readonly ColumnConfig<TData, any, any, any>[],
   strategy: FilterStrategy,
 ): Column<TData>[] {
   return columnConfigs.map((columnConfig) => {
     const getOptions: () => ColumnOption[] = memo(
       () => [data, strategy, columnConfig.options],
       ([data, strategy]) =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
         getColumnOptions(columnConfig, data as any, strategy as any),
       { key: `options-${columnConfig.id}` },
     )
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getValues: () => ElementType<NonNullable<any>>[] = memo(
       () => [data, strategy],
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
       () => (strategy === "client" ? getColumnValues(columnConfig, data) : []),
       { key: `values-${columnConfig.id}` },
     )
@@ -376,12 +421,14 @@ export function createColumns<TData>(
     const getUniqueValues: () => Map<string, number> | undefined = memo(
       () => [getValues(), strategy],
       ([values, strategy]) =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
         getFacetedUniqueValues(columnConfig, values as any, strategy as any),
       { key: `faceted-${columnConfig.id}` },
     )
 
     const getMinMaxValues: () => [number, number] | undefined = memo(
       () => [data, strategy],
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       () => getFacetedMinMaxValues(columnConfig, data, strategy),
       { key: `minmax-${columnConfig.id}` },
     )
@@ -394,9 +441,13 @@ export function createColumns<TData>(
       getFacetedUniqueValues: getUniqueValues,
       getFacetedMinMaxValues: getMinMaxValues,
       // Prefetch methods will be added below
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       prefetchOptions: async () => {}, // Placeholder, defined below
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       prefetchValues: async () => {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       prefetchFacetedUniqueValues: async () => {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       prefetchFacetedMinMaxValues: async () => {},
       _prefetchedOptionsCache: null, // Initialize private cache
       _prefetchedValuesCache: null,

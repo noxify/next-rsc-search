@@ -57,7 +57,7 @@ export type OptionBasedColumnDataType = Extract<
 /*
  * Maps a ColumnDataType to it's primitive type (i.e. string, number, etc.).
  */
-export type ColumnDataNativeMap = {
+export interface ColumnDataNativeMap {
   text: string
   number: number
   date: Date
@@ -69,9 +69,9 @@ export type ColumnDataNativeMap = {
  * Represents the value of a column filter.
  * Contigent on the filtered column's data type.
  */
-export type FilterValues<T extends ColumnDataType> = Array<
-  ElementType<ColumnDataNativeMap[T]>
->
+export type FilterValues<T extends ColumnDataType> = ElementType<
+  ColumnDataNativeMap[T]
+>[]
 
 /*
  * An accessor function for a column's data.
@@ -99,12 +99,13 @@ export type TOrderFn<TVal = unknown> = (
 /*
  * The configuration for a column.
  */
-export type ColumnConfig<
+export interface ColumnConfig<
   TData,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TType extends ColumnDataType = any,
   TVal = unknown,
   TId extends string = string,
-> = {
+> {
   id: TId
   accessor: TAccessorFn<TData, TVal>
   displayName: string
@@ -124,27 +125,29 @@ export type ColumnConfig<
 
 export type OptionColumnId<T> =
   T extends ColumnConfig<
-    infer TData,
+    infer _TData,
     "option" | "multiOption",
-    infer TVal,
+    infer _TVal,
     infer TId
   >
     ? TId
     : never
 
 export type OptionColumnIds<
-  T extends ReadonlyArray<ColumnConfig<any, any, any, any>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  T extends readonly ColumnConfig<any, any, any, any>[],
 > = {
   [K in keyof T]: OptionColumnId<T[K]>
 }[number]
 
 export type NumberColumnId<T> =
-  T extends ColumnConfig<infer TData, "number", infer TVal, infer TId>
+  T extends ColumnConfig<infer _TData, "number", infer _TVal, infer TId>
     ? TId
     : never
 
 export type NumberColumnIds<
-  T extends ReadonlyArray<ColumnConfig<any, any, any, any>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  T extends readonly ColumnConfig<any, any, any, any>[],
 > = {
   [K in keyof T]: NumberColumnId<T[K]>
 }[number]
@@ -152,7 +155,7 @@ export type NumberColumnIds<
 /*
  * Describes a helper function for creating column configurations.
  */
-export type ColumnConfigHelper<TData> = {
+export interface ColumnConfigHelper<TData> {
   accessor: <
     TAccessor extends TAccessorFn<TData>,
     TType extends ColumnDataType,
@@ -163,12 +166,12 @@ export type ColumnConfigHelper<TData> = {
   ) => ColumnConfig<TData, TType, unknown>
 }
 
-export type DataTableFilterConfig<TData> = {
+export interface DataTableFilterConfig<TData> {
   data: TData[]
   columns: ColumnConfig<TData>[]
 }
 
-export type ColumnProperties<TData, TVal> = {
+export interface ColumnProperties<_TData, TVal> {
   getOptions: () => ColumnOption[]
   getValues: () => ElementType<NonNullable<TVal>>[]
   getFacetedUniqueValues: () => Map<string, number> | undefined
@@ -179,7 +182,7 @@ export type ColumnProperties<TData, TVal> = {
   prefetchFacetedMinMaxValues: () => Promise<void> // Prefetch faceted min/max values
 }
 
-export type ColumnPrivateProperties<TData, TVal> = {
+export interface ColumnPrivateProperties<_TData, TVal> {
   _prefetchedOptionsCache: ColumnOption[] | null
   _prefetchedValuesCache: ElementType<NonNullable<TVal>>[] | null
   _prefetchedFacetedUniqueValuesCache: Map<string, number> | null
@@ -188,6 +191,7 @@ export type ColumnPrivateProperties<TData, TVal> = {
 
 export type Column<
   TData,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TType extends ColumnDataType = any,
   TVal = unknown,
 > = ColumnConfig<TData, TType, TVal> &
@@ -264,7 +268,7 @@ export type MultiOptionFilterOperator =
   | "exclude if all"
 
 /* Maps filter operators to their respective data types */
-export type FilterOperators = {
+export interface FilterOperators {
   text: TextFilterOperator
   number: NumberFilterOperator
   date: DateFilterOperator
@@ -281,14 +285,15 @@ export type FilterOperators = {
  * - Values: An array of values to be used for the filter.
  *
  */
-export type FilterModel<TType extends ColumnDataType = any> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface FilterModel<TType extends ColumnDataType = any> {
   columnId: string
   type: TType
   operator: FilterOperators[TType]
   values: FilterValues<TType>
 }
 
-export type FiltersState = Array<FilterModel>
+export type FiltersState = FilterModel[]
 
 /*
  * FilterDetails is a type that represents the details of all the filter operators for a specific column data type.
@@ -299,10 +304,10 @@ export type FilterDetails<T extends ColumnDataType> = {
 
 export type FilterOperatorTarget = "single" | "multiple"
 
-export type FilterOperatorDetailsBase<
+export interface FilterOperatorDetailsBase<
   OperatorValue,
   T extends ColumnDataType,
-> = {
+> {
   /* The i18n key for the operator. */
   key: string
   /* The operator value. Usually the string representation of the operator. */
@@ -314,7 +319,7 @@ export type FilterOperatorDetailsBase<
   /* The singular form of the operator, if applicable. */
   pluralOf?: FilterOperators[T]
   /* All related operators. Normally, all the operators which share the same target. */
-  relativeOf: FilterOperators[T] | Array<FilterOperators[T]>
+  relativeOf: FilterOperators[T] | FilterOperators[T][]
   /* Whether the operator is negated. */
   isNegated: boolean
   /* If the operator is not negated, this provides the negated equivalent. */

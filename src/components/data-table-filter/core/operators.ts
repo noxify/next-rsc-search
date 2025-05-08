@@ -1,4 +1,3 @@
-import type { Locale } from "../lib/i18n"
 import type {
   ColumnDataType,
   FilterDetails,
@@ -7,7 +6,6 @@ import type {
   FilterTypeOperatorDetails,
   FilterValues,
 } from "./types"
-import { t } from "../lib/i18n"
 
 export const DEFAULT_OPERATORS: Record<
   ColumnDataType,

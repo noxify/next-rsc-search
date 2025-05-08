@@ -195,6 +195,7 @@ function FilterOperatorOptionController<TData>({
   )
 
   const changeOperator = (value: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     actions?.setFilterOperator(column.id, value as FilterOperators["option"])
     closeController()
   }
@@ -226,6 +227,7 @@ function FilterOperatorMultiOptionController<TData>({
   )
 
   const changeOperator = (value: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     actions?.setFilterOperator(
       column.id,
       value as FilterOperators["multiOption"],
@@ -260,6 +262,7 @@ function FilterOperatorDateController<TData>({
   )
 
   const changeOperator = (value: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     actions?.setFilterOperator(column.id, value as FilterOperators["date"])
     closeController()
   }
@@ -287,10 +290,12 @@ export function FilterOperatorTextController<TData>({
   const filterDetails = textFilterOperators[filter.operator]
 
   const relatedFilters = Object.values(textFilterOperators).filter(
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     (o) => o.target === filterDetails.target,
   )
 
   const changeOperator = (value: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     actions?.setFilterOperator(column.id, value as FilterOperators["text"])
     closeController()
   }
@@ -322,6 +327,7 @@ function FilterOperatorNumberController<TData>({
   )
 
   const changeOperator = (value: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     actions?.setFilterOperator(column.id, value as FilterOperators["number"])
     closeController()
   }

@@ -11,7 +11,7 @@ import type { FilterModel } from "../core/types"
 import { dateFilterOperators } from "../core/operators"
 import { intersection } from "./array"
 
-export function optionFilterFn<TData>(
+export function optionFilterFn(
   inputData: string,
   filterValue: FilterModel<"option">,
 ) {
@@ -36,6 +36,7 @@ export function multiOptionFilterFn(
   inputData: string[],
   filterValue: FilterModel<"multiOption">,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!inputData) return false
 
   if (
@@ -65,10 +66,11 @@ export function multiOptionFilterFn(
   }
 }
 
-export function dateFilterFn<TData>(
+export function dateFilterFn(
   inputData: Date,
   filterValue: FilterModel<"date">,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!filterValue || filterValue.values.length === 0) return true
 
   if (
@@ -115,10 +117,11 @@ export function dateFilterFn<TData>(
   }
 }
 
-export function textFilterFn<TData>(
+export function textFilterFn(
   inputData: string,
   filterValue: FilterModel<"text">,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!filterValue || filterValue.values.length === 0) return true
 
   const value = inputData.toLowerCase().trim()
@@ -136,11 +139,12 @@ export function textFilterFn<TData>(
   }
 }
 
-export function numberFilterFn<TData>(
+export function numberFilterFn(
   inputData: number,
   filterValue: FilterModel<"number">,
 ) {
-  if (!filterValue || !filterValue.values || filterValue.values.length === 0) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (!filterValue?.values || filterValue.values.length === 0) {
     return true
   }
 

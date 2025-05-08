@@ -1,7 +1,7 @@
-export function memo<TDeps extends readonly any[], TResult>(
+export function memo<TDeps extends readonly unknown[], TResult>(
   getDeps: () => TDeps,
   compute: (deps: TDeps) => TResult,
-  options: { key: string },
+  _options: { key: string },
 ): () => TResult {
   let prevDeps: TDeps | undefined
   let cachedResult: TResult | undefined
@@ -20,6 +20,7 @@ export function memo<TDeps extends readonly any[], TResult>(
       // console.log(`[memo] Cache HIT - ${options.key}`)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return cachedResult!
   }
 }

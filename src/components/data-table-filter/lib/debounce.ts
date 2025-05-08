@@ -1,16 +1,17 @@
-type ControlFunctions = {
+interface ControlFunctions {
   cancel: () => void
   flush: () => void
   isPending: () => boolean
 }
 
-type DebounceOptions = {
+interface DebounceOptions {
   leading?: boolean
   trailing?: boolean
   maxWait?: number
 }
 
-export function debounce<T extends (...args: any[]) => any>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounce<T extends (...args: unknown[]) => any>(
   func: T,
   wait: number,
   options: DebounceOptions = {},
@@ -18,7 +19,7 @@ export function debounce<T extends (...args: any[]) => any>(
   const { leading = false, trailing = true, maxWait } = options
   let timeout: NodeJS.Timeout | null = null
   let lastArgs: Parameters<T> | null = null
-  let lastThis: any
+  let lastThis: unknown
   let result: ReturnType<T> | undefined
   let lastCallTime: number | null = null
   let lastInvokeTime = 0
@@ -32,7 +33,9 @@ export function debounce<T extends (...args: any[]) => any>(
     lastArgs = null
     lastThis = null
     lastInvokeTime = time
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result = func.apply(thisArg, args)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return result
   }
 
@@ -41,6 +44,7 @@ export function debounce<T extends (...args: any[]) => any>(
     const timeSinceLastCall = time - lastCallTime
     const timeSinceLastInvoke = time - lastInvokeTime
     return (
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       lastCallTime === null ||
       timeSinceLastCall >= wait ||
       timeSinceLastCall < 0 ||
@@ -68,6 +72,7 @@ export function debounce<T extends (...args: any[]) => any>(
   function timerExpired() {
     const time = Date.now()
     if (shouldInvoke(time)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return trailingEdge(time)
     }
     timeout = startTimer(timerExpired, remainingWait(time))
@@ -76,42 +81,47 @@ export function debounce<T extends (...args: any[]) => any>(
   function leadingEdge(time: number): ReturnType<T> | undefined {
     lastInvokeTime = time
     timeout = startTimer(timerExpired, wait)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return leading ? invokeFunc(time) : undefined
   }
 
   function trailingEdge(time: number): ReturnType<T> | undefined {
     timeout = null
     if (trailing && lastArgs) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return invokeFunc(time)
     }
     lastArgs = null
     lastThis = null
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return result
   }
 
   function debounced(
-    this: any,
+    this: unknown,
     ...args: Parameters<T>
   ): ReturnType<T> | undefined {
     const time = Date.now()
     const isInvoking = shouldInvoke(time)
 
     lastArgs = args
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     lastThis = this
     lastCallTime = time
 
     if (isInvoking) {
       if (timeout === null) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return leadingEdge(lastCallTime)
       }
       if (maxWaitTime !== null) {
         timeout = startTimer(timerExpired, wait)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return invokeFunc(lastCallTime)
       }
     }
-    if (timeout === null) {
-      timeout = startTimer(timerExpired, wait)
-    }
+    timeout ??= startTimer(timerExpired, wait)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return result
   }
 
@@ -127,6 +137,7 @@ export function debounce<T extends (...args: any[]) => any>(
   }
 
   debounced.flush = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return timeout === null ? result : trailingEdge(Date.now())
   }
 

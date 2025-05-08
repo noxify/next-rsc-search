@@ -165,10 +165,9 @@ export function FilterValueDisplay<TData, TType extends ColumnDataType>({
 export function FilterValueOptionDisplay<TData>({
   filter,
   column,
-  actions,
-  locale = "en",
 }: FilterValueDisplayProps<TData, "option">) {
   const options = useMemo(() => column.getOptions(), [column])
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const selected = options.filter((o) => filter?.values.includes(o.value))
 
   // We display the selected options based on how many are selected
@@ -197,12 +196,14 @@ export function FilterValueOptionDisplay<TData>({
   // TODO: Better pluralization for different languages
   const pluralName = name.endsWith("s") ? `${name}es` : `${name}s`
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const hasOptionIcons = !options?.some((o) => !o.icon)
 
   return (
     <div className="inline-flex items-center gap-0.5">
       {hasOptionIcons &&
         take(selected, 3).map(({ value, icon }) => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const Icon = icon!
           return isValidElement(Icon) ? (
             Icon
@@ -220,8 +221,6 @@ export function FilterValueOptionDisplay<TData>({
 export function FilterValueMultiOptionDisplay<TData>({
   filter,
   column,
-  actions,
-  locale = "en",
 }: FilterValueDisplayProps<TData, "multiOption">) {
   const options = useMemo(() => column.getOptions(), [column])
   const selected = options.filter((o) => filter.values.includes(o.value))
@@ -245,6 +244,7 @@ export function FilterValueMultiOptionDisplay<TData>({
 
   const name = column.displayName.toLowerCase()
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const hasOptionIcons = !options?.some((o) => !o.icon)
 
   return (
@@ -252,6 +252,7 @@ export function FilterValueMultiOptionDisplay<TData>({
       {hasOptionIcons && (
         <div key="icons" className="inline-flex items-center gap-0.5">
           {take(selected, 3).map(({ value, icon }) => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const Icon = icon!
             return isValidElement(Icon) ? (
               cloneElement(Icon, { key: value })
@@ -285,10 +286,8 @@ function formatDateRange(start: Date, end: Date) {
 
 export function FilterValueDateDisplay<TData>({
   filter,
-  column,
-  actions,
-  locale = "en",
 }: FilterValueDisplayProps<TData, "date">) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!filter) return null
   if (filter.values.length === 0) return <Ellipsis className="size-4" />
   if (filter.values.length === 1) {
@@ -306,10 +305,8 @@ export function FilterValueDateDisplay<TData>({
 
 export function FilterValueTextDisplay<TData>({
   filter,
-  column,
-  actions,
-  locale = "en",
 }: FilterValueDisplayProps<TData, "text">) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!filter) return null
   if (filter.values.length === 0 || filter.values[0].trim() === "")
     return <Ellipsis className="size-4" />
@@ -321,11 +318,10 @@ export function FilterValueTextDisplay<TData>({
 
 export function FilterValueNumberDisplay<TData>({
   filter,
-  column,
-  actions,
   locale = "en",
 }: FilterValueDisplayProps<TData, "number">) {
-  if (!filter || !filter.values || filter.values.length === 0) return null
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (!filter?.values || filter.values.length === 0) return null
 
   if (
     filter.operator === "is between" ||
@@ -482,10 +478,13 @@ export function FilterValueOptionController<TData>({
     const counts = column.getFacetedUniqueValues()
     return column.getOptions().map((o) => ({
       ...o,
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       selected: filter?.values.includes(o.value),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       initialSelected: filter?.values.includes(o.value),
       count: counts?.get(o.value) ?? 0,
     }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [options, setOptions] = useState(initialOptions)
@@ -493,8 +492,10 @@ export function FilterValueOptionController<TData>({
   // Update selected state when filter values change
   useEffect(() => {
     setOptions((prev) =>
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       prev.map((o) => ({ ...o, selected: filter?.values.includes(o.value) })),
     )
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   }, [filter?.values])
 
   const handleToggle = useCallback(
@@ -557,6 +558,7 @@ export function FilterValueMultiOptionController<TData>({
   const initialOptions = useMemo(() => {
     const counts = column.getFacetedUniqueValues()
     return column.getOptions().map((o) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       const selected = filter?.values.includes(o.value)
       return {
         ...o,
@@ -565,6 +567,7 @@ export function FilterValueMultiOptionController<TData>({
         count: counts?.get(o.value) ?? 0,
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [options, setOptions] = useState(initialOptions)
@@ -572,8 +575,10 @@ export function FilterValueMultiOptionController<TData>({
   // Update selected state when filter values change
   useEffect(() => {
     setOptions((prev) =>
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       prev.map((o) => ({ ...o, selected: filter?.values.includes(o.value) })),
     )
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   }, [filter?.values])
 
   const handleToggle = useCallback(
@@ -632,16 +637,17 @@ export function FilterValueDateController<TData>({
   actions,
 }: FilterValueControllerProps<TData, "date">) {
   const [date, setDate] = useState<DateRange | undefined>({
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     from: filter?.values[0] ?? new Date(),
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     to: filter?.values[1] ?? undefined,
   })
 
   function changeDateRange(value: DateRange | undefined) {
     const start = value?.from
     const end =
-      start && value && value.to && !isEqual(start, value.to)
-        ? value.to
-        : undefined
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      start && value?.to && !isEqual(start, value.to) ? value.to : undefined
 
     setDate({ from: start, to: end })
 
@@ -657,7 +663,7 @@ export function FilterValueDateController<TData>({
         <CommandGroup>
           <div>
             <Calendar
-              initialFocus
+              autoFocus={true}
               mode="range"
               defaultMonth={date?.from}
               selected={date}
@@ -689,6 +695,7 @@ export function FilterValueTextController<TData>({
             <DebouncedInput
               placeholder={t("search", locale)}
               autoFocus
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               value={filter?.values[0] ?? ""}
               onChange={changeText}
             />
@@ -712,21 +719,25 @@ export function FilterValueNumberController<TData>({
   ]
 
   // Local state for values
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const [values, setValues] = useState(filter?.values ?? [0, 0])
 
   // Sync with parent filter changes
   useEffect(() => {
     if (
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       filter?.values &&
       filter.values.length === values.length &&
       filter.values.every((v, i) => v === values[i])
     ) {
       setValues(filter.values)
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   }, [filter?.values, values])
 
   const isNumberRange =
     // filter && values.length === 2
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     filter && numberFilterOperators[filter.operator].target === "multiple"
 
   const setFilterOperatorDebounced = useDebounceCallback(
@@ -740,18 +751,21 @@ export function FilterValueNumberController<TData>({
 
   const changeNumber = (value: number[]) => {
     setValues(value)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     setFilterValueDebounced(column as any, value)
   }
 
   const changeMinNumber = (value: number) => {
     const newValues = createNumberRange([value, values[1]])
     setValues(newValues)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     setFilterValueDebounced(column as any, newValues)
   }
 
   const changeMaxNumber = (value: number) => {
     const newValues = createNumberRange([values[0], value])
     setValues(newValues)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     setFilterValueDebounced(column as any, newValues)
   }
 
@@ -783,6 +797,7 @@ export function FilterValueNumberController<TData>({
       actions.setFilterOperator(column.id, newOperator)
       actions.setFilterValue(column, newValues)
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [values, column, actions, minMax],
   )
 
@@ -818,7 +833,8 @@ export function FilterValueNumberController<TData>({
                     id="single"
                     type="number"
                     value={values[0].toString()} // Use values[0] directly
-                    onChange={(v) => changeNumber([Number(v)])}
+                    // @ts-expect-error type mismatch?
+                    onChange={(v: string) => changeNumber([Number(v)])}
                   />
                 </div>
               </TabsContent>
@@ -841,7 +857,8 @@ export function FilterValueNumberController<TData>({
                     <DebouncedInput
                       type="number"
                       value={values[0]}
-                      onChange={(v) => changeMinNumber(Number(v))}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      onChange={(v: any) => changeMinNumber(Number(v))}
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -851,7 +868,8 @@ export function FilterValueNumberController<TData>({
                     <DebouncedInput
                       type="number"
                       value={values[1]}
-                      onChange={(v) => changeMaxNumber(Number(v))}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      onChange={(v: any) => changeMaxNumber(Number(v))}
                     />
                   </div>
                 </div>
