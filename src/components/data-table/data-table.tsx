@@ -1,14 +1,11 @@
-import * as React from "react";
 import type {
   DataTableFilterableColumn,
   DataTableSearchableColumn,
-} from "@/types";
-import {
-  flexRender,
-  type ColumnDef,
-  type Table as TanstackTable,
-} from "@tanstack/react-table";
-
+} from "@/types"
+import type { ColumnDef, Table as TanstackTable } from "@tanstack/react-table"
+import * as React from "react"
+import { DataTablePagination } from "@/components/data-table/data-table-pagination"
+import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
 import {
   Table,
   TableBody,
@@ -16,27 +13,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-
-import { DataTablePagination } from "@/components/data-table/data-table-pagination";
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
-import { Field } from "react-querybuilder";
+} from "@/components/ui/table"
+import { flexRender } from "@tanstack/react-table"
+import { Field } from "react-querybuilder"
 
 interface DataTableProps<TData, TValue> {
   /**
    * The table instance returned from useDataTable hook with pagination, sorting, filtering, etc.
    * @type TanstackTable<TData>
    */
-  table: TanstackTable<TData>;
+  table: TanstackTable<TData>
 
   /**
    * The columns of the table.
    * @default []
    * @type ColumnDef<TData, TValue>[]
    */
-  columns: ColumnDef<TData, TValue>[];
+  columns: ColumnDef<TData, TValue>[]
 
-  filterFields?: Field[];
+  filterFields?: Field[]
 }
 
 export function DataTable<TData, TValue>({
@@ -60,10 +55,10 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -79,7 +74,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -102,5 +97,5 @@ export function DataTable<TData, TValue>({
         <DataTablePagination table={table} />
       </div>
     </div>
-  );
+  )
 }

@@ -4,20 +4,20 @@
  *   * https://github.com/prisma/prisma/issues/6980#issuecomment-1605250072
  */
 
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client"
 
-export type Models = keyof typeof Prisma.ModelName;
+export type Models = keyof typeof Prisma.ModelName
 
 export type ArgsType<T extends Models> =
-  Prisma.TypeMap["model"][T]["operations"]["findMany"]["args"];
+  Prisma.TypeMap["model"][T]["operations"]["findMany"]["args"]
 
-export type WhereType<T extends Models> = NonNullable<ArgsType<T>["where"]>;
+export type WhereType<T extends Models> = NonNullable<ArgsType<T>["where"]>
 
-export type AndType<T extends Models> = NonNullable<WhereType<T>["AND"]>;
+export type AndType<T extends Models> = NonNullable<WhereType<T>["AND"]>
 
-export type OrType<T extends Models> = NonNullable<WhereType<T>["OR"]>;
+export type OrType<T extends Models> = NonNullable<WhereType<T>["OR"]>
 
-export type WhereInput<T extends Models> = Prisma.Args<T, "findMany">["where"];
+export type WhereInput<T extends Models> = Prisma.Args<T, "findMany">["where"]
 
 export type PrismaFieldOperator =
   | "contains"
@@ -32,8 +32,8 @@ export type PrismaFieldOperator =
   | "not"
   | "notIn"
   | "isEmpty"
-  | null;
+  | null
 
 export type TaskWithRelations = Prisma.TaskGetPayload<{
-  include: { assignee: true };
-}>;
+  include: { assignee: true }
+}>

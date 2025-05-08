@@ -1,5 +1,5 @@
-import { TaskLabel, TaskPriority, TaskStatus } from "@/enum";
-import { Field, defaultOperators, RuleType } from "react-querybuilder";
+import { TaskLabel, TaskPriority, TaskStatus } from "@/enum"
+import { defaultOperators, Field, RuleType } from "react-querybuilder"
 
 export const fields: Field[] = [
   {
@@ -7,7 +7,7 @@ export const fields: Field[] = [
     label: "Name",
     operators: [
       ...defaultOperators.filter((op) =>
-        ["=", "contains", "beginsWith", "null"].includes(op.name)
+        ["=", "contains", "beginsWith", "null"].includes(op.name),
       ),
     ],
     validator: (r: RuleType) => !!r.value,
@@ -17,7 +17,7 @@ export const fields: Field[] = [
     label: "Code",
     operators: [
       ...defaultOperators.filter((op) =>
-        ["=", "contains", "beginsWith", "null"].includes(op.name)
+        ["=", "contains", "beginsWith", "null"].includes(op.name),
       ),
     ],
     validator: (r: RuleType) => !!r.value,
@@ -61,9 +61,9 @@ export const fields: Field[] = [
     label: "Assignee Name",
     operators: [
       ...defaultOperators.filter((op) =>
-        ["=", "contains", "beginsWith", "null"].includes(op.name)
+        ["=", "contains", "beginsWith", "null"].includes(op.name),
       ),
     ],
     validator: (r: RuleType) => !!r.value,
   },
-];
+]

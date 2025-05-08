@@ -1,26 +1,25 @@
-import { type Column } from "@tanstack/react-table";
-
-import { cn } from "@/utils/cn";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
+import { cn } from "@/utils/cn"
+import { type Column } from "@tanstack/react-table"
 import {
   ArrowDownIcon,
   ArrowUpDownIcon,
   ArrowUpIcon,
   EyeOffIcon,
   XIcon,
-} from "lucide-react";
+} from "lucide-react"
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>;
-  title: string;
+  column: Column<TData, TValue>
+  title: string
 }
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -29,7 +28,7 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>;
+    return <div className={cn(className)}>{title}</div>
   }
 
   return (
@@ -41,12 +40,12 @@ export function DataTableColumnHeader<TData, TValue>({
               column.getIsSorted() === "desc"
                 ? `Sorted descending. Click to sort ascending.`
                 : column.getIsSorted() === "asc"
-                ? `Sorted ascending. Click to sort descending.`
-                : `Not sorted. Click to sort ascending.`
+                  ? `Sorted ascending. Click to sort descending.`
+                  : `Not sorted. Click to sort ascending.`
             }
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
+            className="data-[state=open]:bg-accent -ml-3 h-8"
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
@@ -64,7 +63,7 @@ export function DataTableColumnHeader<TData, TValue>({
             onClick={() => column.toggleSorting(false)}
           >
             <ArrowUpIcon
-              className="mr-2 size-3.5 text-muted-foreground/70"
+              className="text-muted-foreground/70 mr-2 size-3.5"
               aria-hidden="true"
             />
             Asc
@@ -74,7 +73,7 @@ export function DataTableColumnHeader<TData, TValue>({
             onClick={() => column.toggleSorting(true)}
           >
             <ArrowDownIcon
-              className="mr-2 size-3.5 text-muted-foreground/70"
+              className="text-muted-foreground/70 mr-2 size-3.5"
               aria-hidden="true"
             />
             Desc
@@ -85,7 +84,7 @@ export function DataTableColumnHeader<TData, TValue>({
               onClick={() => column.clearSorting()}
             >
               <XIcon
-                className="mr-2 size-3.5 text-muted-foreground/70"
+                className="text-muted-foreground/70 mr-2 size-3.5"
                 aria-hidden="true"
               />
               Reset
@@ -97,7 +96,7 @@ export function DataTableColumnHeader<TData, TValue>({
             onClick={() => column.toggleVisibility(false)}
           >
             <EyeOffIcon
-              className="mr-2 size-3.5 text-muted-foreground/70"
+              className="text-muted-foreground/70 mr-2 size-3.5"
               aria-hidden="true"
             />
             Hide
@@ -105,5 +104,5 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  );
+  )
 }

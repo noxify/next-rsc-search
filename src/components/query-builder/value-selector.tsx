@@ -1,10 +1,12 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-
-import { cn } from "@/utils/cn";
-import { Button } from "@/components/ui/button";
+import type {
+  FullOption,
+  FullOptionList,
+  ValueSelectorProps,
+} from "react-querybuilder"
+import * as React from "react"
+import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -12,33 +14,33 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@/components/ui/command"
+import { MultiSelect } from "@/components/ui/multi-select"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-
+} from "@/components/ui/popover"
+import { cn } from "@/utils/cn"
+import { search } from "deepsearchjs"
+import { Check, ChevronsUpDown } from "lucide-react"
 import {
+  isOptionGroupArray,
+  uniqOptList,
   useSelectElementChangeHandler,
   useValueSelector,
-} from "react-querybuilder";
-import type { FullOption, ValueSelectorProps } from "react-querybuilder";
-import type { FullOptionList } from "react-querybuilder";
-import { isOptionGroupArray, uniqOptList } from "react-querybuilder";
-import { MultiSelect } from "@/components/ui/multi-select";
-import { search } from "deepsearchjs";
+} from "react-querybuilder"
 
 export const optionListToComboboxData = (list: FullOptionList<FullOption>) => {
-  const uniqList = uniqOptList(list);
+  const uniqList = uniqOptList(list)
   return isOptionGroupArray(uniqList)
     ? uniqList.map((og) => ({ ...og, group: og.label, items: og.options }))
     : uniqList.map((opt) => ({
         name: opt.name,
         value: opt.name,
         label: opt.label,
-      }));
-};
+      }))
+}
 
 export const ValueSelector = <Opt extends FullOption = FullOption>({
   handleOnChange,
@@ -48,14 +50,14 @@ export const ValueSelector = <Opt extends FullOption = FullOption>({
   listsAsArrays,
   className,
 }: ValueSelectorProps<Opt>) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
   //const [value, setValue] = React.useState("");
   const { onChange, val } = useValueSelector({
     handleOnChange,
     listsAsArrays,
     multiple,
     value,
-  });
+  })
 
   return multiple ? (
     <MultiSelect
@@ -63,7 +65,7 @@ export const ValueSelector = <Opt extends FullOption = FullOption>({
       options={optionListToComboboxData(options)}
       selected={value ? (value as unknown as string[]) : []}
       onChange={(currentValue) => {
-        onChange(currentValue as string[]);
+        onChange(currentValue as string[])
       }}
     />
   ) : (
@@ -73,15 +75,15 @@ export const ValueSelector = <Opt extends FullOption = FullOption>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-full sm:max-w-[186px] justify-between", className)}
+          className={cn("w-full justify-between sm:max-w-[186px]", className)}
         >
           {value
             ? options.find((ele) =>
                 "options" in ele
                   ? (ele.options as FullOption[]).find(
-                      (sub) => sub.value === value
+                      (sub) => sub.value === value,
                     )
-                  : ele.value === value
+                  : ele.value === value,
               )?.label
             : "Select..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -104,8 +106,8 @@ export const ValueSelector = <Opt extends FullOption = FullOption>({
                           key={index}
                           value={option.value}
                           onSelect={(currentValue) => {
-                            onChange(currentValue);
-                            setOpen(false);
+                            onChange(currentValue)
+                            setOpen(false)
                           }}
                         >
                           <Check
@@ -113,13 +115,13 @@ export const ValueSelector = <Opt extends FullOption = FullOption>({
                               "mr-2 h-4 w-4",
                               value === option.value
                                 ? "opacity-100"
-                                : "opacity-0"
+                                : "opacity-0",
                             )}
                           />
                           {option.label}
                         </CommandItem>
-                      );
-                    });
+                      )
+                    })
                   }
                 } else {
                   return (
@@ -127,19 +129,19 @@ export const ValueSelector = <Opt extends FullOption = FullOption>({
                       key={index}
                       value={option.value}
                       onSelect={(currentValue) => {
-                        onChange(currentValue);
-                        setOpen(false);
+                        onChange(currentValue)
+                        setOpen(false)
                       }}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          value === option.value ? "opacity-100" : "opacity-0"
+                          value === option.value ? "opacity-100" : "opacity-0",
                         )}
                       />
                       {option.label}
                     </CommandItem>
-                  );
+                  )
                 }
               })}
             </CommandGroup>
@@ -147,6 +149,6 @@ export const ValueSelector = <Opt extends FullOption = FullOption>({
         </Command>
       </PopoverContent>
     </Popover>
-  );
-};
-ValueSelector.displayName = "ValueSelector";
+  )
+}
+ValueSelector.displayName = "ValueSelector"

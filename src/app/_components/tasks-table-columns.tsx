@@ -1,13 +1,12 @@
-"use client";
+"use client"
 
-import * as React from "react";
-
-import { type ColumnDef } from "@tanstack/react-table";
-
-import { Badge } from "@/components/ui/badge";
-
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import type { Task } from "@prisma/client";
+import type { Task } from "@prisma/client"
+import * as React from "react"
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
+import { Badge } from "@/components/ui/badge"
+import { TaskLabel, TaskPriority, TaskStatus } from "@/enum"
+import { TaskWithRelations } from "@/types/prisma"
+import { type ColumnDef } from "@tanstack/react-table"
 import {
   ArrowDownIcon,
   ArrowRightIcon,
@@ -17,9 +16,7 @@ import {
   Clock3Icon,
   HelpCircleIcon,
   XCircleIcon,
-} from "lucide-react";
-import { TaskLabel, TaskPriority, TaskStatus } from "@/enum";
-import { TaskWithRelations } from "@/types/prisma";
+} from "lucide-react"
 
 export function getColumns(): ColumnDef<TaskWithRelations>[] {
   return [
@@ -39,8 +36,8 @@ export function getColumns(): ColumnDef<TaskWithRelations>[] {
       ),
       cell: ({ row }) => {
         const label = Object.values(TaskLabel).find(
-          (label) => label === row.original.label
-        );
+          (label) => label === row.original.label,
+        )
 
         return (
           <div className="flex space-x-2">
@@ -49,7 +46,7 @@ export function getColumns(): ColumnDef<TaskWithRelations>[] {
               {row.getValue("name")}
             </span>
           </div>
-        );
+        )
       },
     },
     {
@@ -59,42 +56,42 @@ export function getColumns(): ColumnDef<TaskWithRelations>[] {
       ),
       cell: ({ row }) => {
         const status = Object.values(TaskStatus).find(
-          (status) => status === row.original.status
-        );
+          (status) => status === row.original.status,
+        )
 
-        if (!status) return null;
+        if (!status) return null
 
         return (
           <div className="flex w-[100px] items-center">
             {status === "canceled" ? (
               <XCircleIcon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             ) : status === "done" ? (
               <CheckCircle2Icon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             ) : status === "in_progress" ? (
               <Clock3Icon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             ) : status === "todo" ? (
               <HelpCircleIcon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             ) : (
               <CircleIcon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             )}
             <span className="capitalize">{status}</span>
           </div>
-        );
+        )
       },
     },
     {
@@ -104,39 +101,39 @@ export function getColumns(): ColumnDef<TaskWithRelations>[] {
       ),
       cell: ({ row }) => {
         const priority = Object.values(TaskPriority).find(
-          (priority) => priority === row.original.priority
-        );
+          (priority) => priority === row.original.priority,
+        )
 
         if (!priority) {
-          return null;
+          return null
         }
 
         return (
           <div className="flex items-center">
             {priority === "low" ? (
               <ArrowDownIcon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             ) : priority === "medium" ? (
               <ArrowRightIcon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             ) : priority === "high" ? (
               <ArrowUpIcon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             ) : (
               <CircleIcon
-                className="mr-2 size-4 text-muted-foreground"
+                className="text-muted-foreground mr-2 size-4"
                 aria-hidden="true"
               />
             )}
             <span className="capitalize">{priority}</span>
           </div>
-        );
+        )
       },
     },
 
@@ -146,8 +143,8 @@ export function getColumns(): ColumnDef<TaskWithRelations>[] {
         <DataTableColumnHeader column={column} title="Assignees" />
       ),
       cell: ({ row }) => {
-        return <>{row.original.assignee.map((ele) => ele.name)}</>;
+        return <>{row.original.assignee.map((ele) => ele.name)}</>
       },
     },
-  ];
+  ]
 }

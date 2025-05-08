@@ -1,17 +1,7 @@
-import {
-  ActionElement,
-  Field,
-  InputType,
-  QueryBuilder,
-  RuleGroupType,
-  RuleType,
-  defaultValidator,
-  formatQuery,
-} from "react-querybuilder";
-
-import { parseSQL } from "react-querybuilder/parseSQL";
-
-import { Button } from "@/components/ui/button";
+import React from "react"
+import { CustomValueEditor } from "@/components/query-builder/value-editor"
+import { ValueSelector } from "@/components/query-builder/value-selector"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -19,39 +9,46 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-
-import React from "react";
-import { CustomValueEditor } from "@/components/query-builder/value-editor";
-import { useQueryState } from "nuqs";
-import { searchParams } from "@/utils/search-params";
-import { search } from "deepsearchjs";
-import { ValueSelector } from "@/components/query-builder/value-selector";
-import { XIcon } from "lucide-react";
+} from "@/components/ui/dialog"
+import { searchParams } from "@/utils/search-params"
+import { search } from "deepsearchjs"
+import { XIcon } from "lucide-react"
+import { useQueryState } from "nuqs"
+import {
+  ActionElement,
+  defaultValidator,
+  Field,
+  formatQuery,
+  InputType,
+  QueryBuilder,
+  RuleGroupType,
+  RuleType,
+} from "react-querybuilder"
+import { parseSQL } from "react-querybuilder/parseSQL"
 
 export default function DataTableQueryBuilder({
   fields = [],
 }: {
-  fields: Field[];
+  fields: Field[]
 }) {
-  const [, startTransition] = React.useTransition();
+  const [, startTransition] = React.useTransition()
 
-  const [isValid, setIsValid] = React.useState(true);
-  const [open, setOpen] = React.useState(false);
+  const [isValid, setIsValid] = React.useState(true)
+  const [open, setOpen] = React.useState(false)
 
   const [filter, setFilter] = useQueryState(
     "filter",
     searchParams.filter
       .withDefault("(1 = 1)")
-      .withOptions({ startTransition, shallow: false, clearOnDefault: true })
-  );
+      .withOptions({ startTransition, shallow: false, clearOnDefault: true }),
+  )
 
   const [query, setQuery] = React.useState(
-    parseSQL(filter, { listsAsArrays: true })
-  );
+    parseSQL(filter, { listsAsArrays: true }),
+  )
 
   const processRule = (
-    r: RuleType
+    r: RuleType,
   ): RuleType & { inputType?: InputType | null; valid?: boolean } => {
     return {
       ...r,
@@ -61,21 +58,21 @@ export default function DataTableQueryBuilder({
           : !!r.value
         : false, // invalidate rules with falsy values
       inputType: fields.find((f) => f.name === r.field)?.inputType,
-    };
-  };
+    }
+  }
 
   const processGroup = (
-    rg: RuleGroupType
+    rg: RuleGroupType,
   ): RuleGroupType & { valid?: boolean } => ({
     ...rg,
     valid: rg.rules.length > 0, // invalidate empty groups
     rules: rg.rules.map((r: RuleType | RuleGroupType) => {
       if (r["field" as "id"]) {
-        return processRule(r as RuleType);
+        return processRule(r as RuleType)
       }
-      return processGroup(r as RuleGroupType);
+      return processGroup(r as RuleGroupType)
     }),
-  });
+  })
 
   return (
     <div className="flex gap-2">
@@ -99,22 +96,22 @@ export default function DataTableQueryBuilder({
             autoSelectField={true}
             autoSelectOperator={true}
             onQueryChange={(userQuery) => {
-              setQuery(userQuery);
+              setQuery(userQuery)
               setIsValid(
                 Object.keys(
                   search(
                     processGroup(userQuery),
-                    (key, value) => /valid/gi.test(key) && value === false
-                  )
-                ).length === 0
-              );
+                    (key, value) => /valid/gi.test(key) && value === false,
+                  ),
+                ).length === 0,
+              )
             }}
             controlElements={{
               valueSelector: ValueSelector,
               valueEditor: CustomValueEditor,
               addGroupAction: (props) => {
-                if (props.level > 1) return null;
-                return <ActionElement {...props} />;
+                if (props.level > 1) return null
+                return <ActionElement {...props} />
               },
             }}
           />
@@ -124,9 +121,9 @@ export default function DataTableQueryBuilder({
               type="submit"
               variant="secondary"
               onClick={() => {
-                setFilter("(1 = 1)");
-                setQuery({ combinator: "and", rules: [] });
-                setOpen(false);
+                setFilter("(1 = 1)")
+                setQuery({ combinator: "and", rules: [] })
+                setOpen(false)
               }}
             >
               Reset filter
@@ -135,8 +132,8 @@ export default function DataTableQueryBuilder({
               disabled={!isValid}
               type="submit"
               onClick={() => {
-                setFilter(formatQuery(query, "sql"));
-                setOpen(false);
+                setFilter(formatQuery(query, "sql"))
+                setOpen(false)
               }}
             >
               Apply filter
@@ -148,14 +145,14 @@ export default function DataTableQueryBuilder({
         <Button
           variant="ghost"
           onClick={() => {
-            setFilter("(1 = 1)");
-            setQuery({ combinator: "and", rules: [] });
+            setFilter("(1 = 1)")
+            setQuery({ combinator: "and", rules: [] })
           }}
         >
-          <XIcon className="h-4 w-4 mr-2" />
+          <XIcon className="mr-2 h-4 w-4" />
           Clear filter
         </Button>
       )}
     </div>
-  );
+  )
 }

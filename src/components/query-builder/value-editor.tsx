@@ -1,26 +1,27 @@
-import * as React from "react";
-import type { ValueEditorProps } from "react-querybuilder";
+import type { ValueEditorProps } from "react-querybuilder"
+import * as React from "react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { FormDescription } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
+import { cn } from "@/utils/cn"
 import {
   getFirstOption,
   standardClassnames,
   useValueEditor,
-} from "react-querybuilder";
-import { toNumberInputValue } from "./utils";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { FormDescription } from "@/components/ui/form";
-import { cn } from "@/utils/cn";
+} from "react-querybuilder"
+
+import { toNumberInputValue } from "./utils"
 
 type CustomValueEditorProps = ValueEditorProps & {
-  extraProps?: Record<string, any>;
-};
+  extraProps?: Record<string, any>
+}
 
-const dateFormat = "YYYY-MM-DD";
-const dateTimeLocalFormat = `${dateFormat}THH:mm:ss`;
+const dateFormat = "YYYY-MM-DD"
+const dateTimeLocalFormat = `${dateFormat}THH:mm:ss`
 
 export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
   const {
@@ -44,7 +45,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
     validation: _validation,
     extraProps,
     ...props
-  } = allProps;
+  } = allProps
 
   const { valueAsArray, multiValueHandler } = useValueEditor({
     handleOnChange,
@@ -55,16 +56,16 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
     listsAsArrays,
     parseNumbers,
     values,
-  });
+  })
 
   if (operator === "null" || operator === "notNull") {
-    return null;
+    return null
   }
 
-  const placeHolderText = fieldData?.placeholder ?? "";
+  const placeHolderText = fieldData?.placeholder ?? ""
   const inputTypeCoerced = ["in", "notIn"].includes(operator)
     ? "text"
-    : inputType || "text";
+    : inputType || "text"
 
   if (
     (operator === "between" || operator === "notBetween") &&
@@ -83,18 +84,18 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
             className={cn(
               standardClassnames.valueListItem,
               "input",
-              !_validation ? "ring-2 ring-red-500" : ""
+              !_validation ? "ring-2 ring-red-500" : "",
             )}
             disabled={disabled}
             onChange={(v) =>
               multiValueHandler(
                 toNumberInputValue(v as unknown as string | number),
-                i
+                i,
               )
             }
             {...extraProps}
           />
-        );
+        )
       }
       // if (inputTypeCoerced === "datetime-local") {
       //   const dateTime = dayjs(valueAsArray[i]);
@@ -128,13 +129,13 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
             className={cn(
               standardClassnames.valueListItem,
               "input",
-              !_validation ? "ring-2 ring-red-500" : ""
+              !_validation ? "ring-2 ring-red-500" : "",
             )}
             disabled={disabled}
             onChange={(e) => multiValueHandler(e.target.value, i)}
             {...extraProps}
           />
-        );
+        )
       }
       return (
         <SelectorComponent
@@ -142,7 +143,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
           key={key}
           className={cn(
             standardClassnames.valueListItem,
-            !_validation ? "ring-2 ring-red-500" : ""
+            !_validation ? "ring-2 ring-red-500" : "",
           )}
           handleOnChange={(v) => multiValueHandler(v, i)}
           disabled={disabled}
@@ -150,8 +151,8 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
           options={values}
           listsAsArrays={listsAsArrays}
         />
-      );
-    });
+      )
+    })
 
     return (
       <span data-testid={testID} className={className} title={title}>
@@ -159,7 +160,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
         {separator}
         {editors[1]}
       </span>
-    );
+    )
   }
 
   switch (type) {
@@ -177,7 +178,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
           multiple={type === "multiselect"}
           listsAsArrays={listsAsArrays}
         />
-      );
+      )
 
     case "textarea":
       return (
@@ -190,7 +191,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
           onChange={(e) => handleOnChange(e.target.value)}
           {...extraProps}
         />
-      );
+      )
 
     case "switch":
       return (
@@ -203,7 +204,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
           onChange={(e) => handleOnChange(e.target.checked)}
           {...extraProps}
         />
-      );
+      )
 
     case "checkbox":
       return (
@@ -216,7 +217,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
           onChange={(e) => handleOnChange(e.target.checked)}
           {...extraProps}
         />
-      );
+      )
 
     case "radio":
       return (
@@ -234,7 +235,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
             </div>
           ))}
         </RadioGroup>
-      );
+      )
   }
 
   // if (inputTypeCoerced === "date" || inputTypeCoerced === "datetime-local") {
@@ -320,7 +321,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
         }
         {...extraProps}
       />
-    );
+    )
   }
 
   return (
@@ -335,7 +336,7 @@ export const CustomValueEditor = (allProps: CustomValueEditorProps) => {
       onChange={(e) => handleOnChange(e.target.value)}
       {...extraProps}
     />
-  );
-};
+  )
+}
 
-CustomValueEditor.displayName = "CustomValueEditor";
+CustomValueEditor.displayName = "CustomValueEditor"

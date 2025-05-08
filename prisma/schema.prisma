@@ -14,7 +14,7 @@ generator enums {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://user:user@localhost:5432/query_params"
+  url      = env("DATABASE_URL")
 }
 
 enum TaskStatus {

@@ -1,23 +1,23 @@
-import { db } from "@/utils/db";
-import { generateQuery } from "@/utils/query-builder";
-import { searchParamsCache } from "@/utils/search-params";
-import { parseSQL } from "react-querybuilder/parseSQL";
+import { db } from "@/utils/db"
+import { generateQuery } from "@/utils/query-builder"
+import { searchParamsCache } from "@/utils/search-params"
+import { parseSQL } from "react-querybuilder/parseSQL"
 
 export async function getTasksData(
-  params: ReturnType<typeof searchParamsCache.parse>
+  params: ReturnType<typeof searchParamsCache.parse>,
 ) {
   const sortDefinition =
     params.sort.by !== ""
       ? {
           [params.sort.by]: params.sort.direction,
         }
-      : undefined;
+      : undefined
 
   const parsedFilter = parseSQL(params.filter ?? "1 = 1", {
     listsAsArrays: true,
-  });
+  })
 
-  const whereCondition = generateQuery(parsedFilter);
+  const whereCondition = generateQuery(parsedFilter)
 
   const [data, totalCount] = await db.$transaction([
     db.task.findMany({
@@ -30,10 +30,10 @@ export async function getTasksData(
       where: whereCondition,
     }),
     db.task.count({ where: whereCondition }),
-  ]);
+  ])
 
   return {
     data,
     pageCount: Math.ceil(totalCount / params.pageSize),
-  };
+  }
 }

@@ -1,16 +1,14 @@
-"use client";
+"use client"
 
-import * as React from "react";
-
-import type { Table } from "@tanstack/react-table";
-
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
-import DataTableQueryBuilder from "@/components/data-table/data-table-querybuilder";
-import { Field } from "react-querybuilder";
+import type { Table } from "@tanstack/react-table"
+import * as React from "react"
+import DataTableQueryBuilder from "@/components/data-table/data-table-querybuilder"
+import { DataTableViewOptions } from "@/components/data-table/data-table-view-options"
+import { Field } from "react-querybuilder"
 
 interface DataTableToolbarProps<TData> {
-  table: Table<TData>;
-  fields?: Field[];
+  table: Table<TData>
+  fields?: Field[]
 }
 
 export function DataTableToolbar<TData>({
@@ -26,5 +24,5 @@ export function DataTableToolbar<TData>({
         <DataTableViewOptions table={table} />
       </div>
     </div>
-  );
+  )
 }
