@@ -221,7 +221,7 @@ export function FilterableColumn<TData, TType extends ColumnDataType, TVal>({
     >
       <div className="flex w-full items-center justify-between">
         <div className="inline-flex items-center gap-1.5">
-          {<column.icon strokeWidth={2.25} className="size-4" />}
+          {column.icon && <column.icon strokeWidth={2.25} className="size-4" />}
           <span>{column.displayName}</span>
         </div>
         <ArrowRightIcon className="size-4 opacity-0 group-aria-selected:opacity-100" />
