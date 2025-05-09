@@ -10,4 +10,6 @@ runs:
         node-version-file: ".nvmrc"
         cache: "pnpm"
     - shell: bash
-      run: pnpm install
+      run: |
+        pnpm install
+        pnpm db:generate
