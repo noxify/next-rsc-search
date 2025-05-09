@@ -34,6 +34,7 @@ export default [
     .text()
     .id("id")
     .accessor((row) => row.id)
+
     .displayName("Task ID")
     .build(),
   dtf
@@ -41,6 +42,7 @@ export default [
     .options(statusOptions)
     .id("status")
     .accessor((row) => row.status)
+
     .displayName("Status")
     .build(),
   dtf
@@ -56,5 +58,18 @@ export default [
     .id("label")
     .accessor((row) => row.label)
     .displayName("Label")
+    .build(),
+
+  dtf
+    .multiOption()
+    .options([])
+    .id("assignee")
+    .accessor((row) => row.assignee)
+    .transformOptionFn((value) => ({
+      value: value.id,
+      label: value.name,
+      icon: undefined,
+    }))
+    .displayName("Assigned to")
     .build(),
 ] as const

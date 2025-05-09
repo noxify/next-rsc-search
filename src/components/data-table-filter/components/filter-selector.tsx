@@ -23,7 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { ArrowRightIcon, ChevronRightIcon, FilterIcon } from "lucide-react"
+import { ArrowRightIcon, ChevronRightIcon, SearchIcon } from "lucide-react"
 
 import type {
   Column,
@@ -154,7 +154,7 @@ function __FilterSelector<TData>({
           variant="outline"
           className={cn("h-7", hasFilters && "w-fit !px-2")}
         >
-          <FilterIcon className="size-4" />
+          <SearchIcon className="size-4" />
           {!hasFilters && <span>{t("filter", locale)}</span>}
         </Button>
       </PopoverTrigger>
@@ -221,7 +221,10 @@ export function FilterableColumn<TData, TType extends ColumnDataType, TVal>({
     >
       <div className="flex w-full items-center justify-between">
         <div className="inline-flex items-center gap-1.5">
-          {column.icon && <column.icon strokeWidth={2.25} className="size-4" />}
+          {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            column.icon && <column.icon strokeWidth={2.25} className="size-4" />
+          }
           <span>{column.displayName}</span>
         </div>
         <ArrowRightIcon className="size-4 opacity-0 group-aria-selected:opacity-100" />

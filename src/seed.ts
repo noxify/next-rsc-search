@@ -13,7 +13,7 @@ async function main() {
   const allAssignees: Assignee[] = []
   console.log("Generating test data")
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 200; i++) {
     allAssignees.push(
       await prisma.assignee.create({
         data: {

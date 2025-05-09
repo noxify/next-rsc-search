@@ -40,3 +40,4 @@ prisma/enums/
 
 .env
 !.env.example
+prisma/dev.db

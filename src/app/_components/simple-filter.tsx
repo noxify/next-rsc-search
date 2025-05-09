@@ -1,6 +1,7 @@
 "use client"
 
-import { startTransition } from "react"
+import type { Prisma } from "@prisma/client"
+import { startTransition, use } from "react"
 import {
   DataTableFilter,
   useDataTableFilters,
@@ -14,7 +15,12 @@ import simpleFilterColumns, {
   statusOptions,
 } from "../_config/simple-filter-columns"
 
-export default function SimpleFilter() {
+export default function SimpleFilter({
+  assigneePromise,
+}: {
+  assigneePromise: Promise<Prisma.AssigneeGetPayload<null>[]>
+}) {
+  const assignees = use(assigneePromise)
   const [filterParams, setFilterParams] = useQueryState(
     "filters",
     searchParams.filters.withDefault([]).withOptions({
@@ -36,6 +42,11 @@ export default function SimpleFilter() {
       status: statusOptions,
       priority: priorityOptions,
       label: labelOptions,
+      assignee: assignees.map((a) => ({
+        value: a.id,
+        label: a.name,
+        icon: undefined,
+      })),
     },
   })
 
