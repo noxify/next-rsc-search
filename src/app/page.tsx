@@ -1,4 +1,4 @@
-import { searchParams, searchParamsCache } from "@/lib/search-params"
+import { searchParamsCache } from "@/lib/search-params"
 
 import SimpleFilter from "./_components/simple-filter"
 
