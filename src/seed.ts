@@ -1,24 +1,26 @@
-import { Assignee, PrismaClient, Task } from "@prisma/client";
-const prisma = new PrismaClient();
-import { faker } from "@faker-js/faker";
-import { TaskLabel, TaskPriority, TaskStatus } from "@/enum";
+import type { Assignee, Task } from "@prisma/client"
+import { TaskLabel, TaskPriority, TaskStatus } from "@/enum"
+import { faker } from "@faker-js/faker"
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
 
 async function main() {
-  console.log("Cleanup data");
-  await prisma.task.deleteMany();
+  console.log("Cleanup data")
+  await prisma.task.deleteMany()
 
-  const allTasks: Omit<Task, "id">[] = [];
-  const allAssignees: Assignee[] = [];
-  console.log("Generating test data");
+  const allTasks: Omit<Task, "id">[] = []
+  const allAssignees: Assignee[] = []
+  console.log("Generating test data")
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 200; i++) {
     allAssignees.push(
       await prisma.assignee.create({
         data: {
           name: faker.person.fullName(),
         },
-      })
-    );
+      }),
+    )
   }
 
   for (let i = 0; i < 100; i++) {
@@ -35,15 +37,15 @@ async function main() {
               .replace(/^./, (letter) => letter.toUpperCase()),
             status:
               faker.helpers.shuffle<Task["status"]>(
-                Object.values(TaskStatus)
+                Object.values(TaskStatus),
               )[0] ?? "todo",
             label:
               faker.helpers.shuffle<Task["label"]>(
-                Object.values(TaskLabel)
+                Object.values(TaskLabel),
               )[0] ?? "bug",
             priority:
               faker.helpers.shuffle<Task["priority"]>(
-                Object.values(TaskPriority)
+                Object.values(TaskPriority),
               )[0] ?? "low",
             createdAt: faker.date.between({
               from: "2022-01-01T00:00:00.000Z",
@@ -61,18 +63,21 @@ async function main() {
                 })),
             },
           },
-        })
-      );
-    } catch (e) {}
+        }),
+      )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e: unknown) {
+      // noop
+    }
   }
 }
 main()
   .then(async () => {
-    console.log("generated");
-    await prisma.$disconnect();
+    console.log("generated")
+    await prisma.$disconnect()
   })
   .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  })

@@ -1,17 +1,23 @@
-import { TasksTable } from "@/app/_components/tasks-table";
-import { searchParamsCache } from "@/utils/search-params";
-import { getTasksData } from "@/utils/tasks-data";
+import { searchParamsCache } from "@/lib/search-params"
+import { db } from "@/utils/db"
+
+import SimpleFilter from "./_components/simple-filter"
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
-  const params = searchParamsCache.parse(searchParams);
+  const params = searchParamsCache.parse(await searchParams)
+
+  const assignees = db.assignee.findMany()
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
-      <TasksTable tasksPromise={getTasksData(params)} />
+      <SimpleFilter assigneePromise={assignees} />
+      <br />
+      Current filter
+      <pre>{JSON.stringify(params, null, 2)}</pre>
     </main>
-  );
+  )
 }

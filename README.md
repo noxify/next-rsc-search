@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next RSC Search
 
-## Getting Started
+This repo is just a POC based on
 
-First, run the development server:
+- NextJS 15
+- Tailwind V4 w/ shadcn
+- [React Query Builder](https://react-querybuilder.js.org/) with [shadcn components](https://github.com/jide/react-querybuilder-shadcn-ui) as advanced filter
+- [Bazza Data Table Filter](https://ui.bazza.dev/docs/data-table-filter) as simple filter
+- [OpenStatus](https://data-table.openstatus.dev/) DataTable to render the table ( based on their "Infinite Data-Table" example)
+- [nuqs](https://nuqs.47ng.com/) to handle the query parameters
+- [Prisma](https://www.prisma.io/) as ORM
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Use Case
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Previously, this repository just contained the react query builder integration, but sometimes the user doesn't need a complex filter.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+With this POC I want to show an approach how to solve this.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+I love the flexibility which we get with the react-query-builder, but from an user perspective, you have to click a lot to get the data filtered.
 
-## Learn More
+I checked some implementations and the goal is to have **one** schema for the url parameters and if there is a complex query which can't be handled in the simple filter,
+we just disable the option to switch to the simple filter.
 
-To learn more about Next.js, take a look at the following resources:
+You may know this behaviour from JIRA or other software.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Credits
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Previously, I have used [TableCN](https://tablecn.com/) to render the data table.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+We also use their schema as base, I just converted it into a prisma schema.

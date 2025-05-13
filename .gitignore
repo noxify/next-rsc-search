@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+prisma/enums/
+.cache
+
+.env
+!.env.example
+prisma/dev.db
