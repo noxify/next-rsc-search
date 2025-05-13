@@ -62,14 +62,8 @@ export default [
 
   dtf
     .multiOption()
-    .options([])
     .id("assignee")
     .accessor((row) => row.assignee)
-    .transformOptionFn((value) => ({
-      value: value.id,
-      label: value.name,
-      icon: undefined,
-    }))
     .displayName("Assigned to")
     .build(),
 ] as const
